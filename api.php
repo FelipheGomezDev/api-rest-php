@@ -2354,7 +2354,7 @@ class PHP_CRUD_API {
 		echo '{"swagger":"2.0",';
 		echo '"info":{';
 		echo '"title":"'.$database.'",';
-		echo '"description":"API generated with [PHP-CRUD-API](https://github.com/feliphegomez/php-crud-api)",';
+		echo '"description":"API generated with [api-rest-php](https://github.com/feliphegomez/api-rest-php)",';
 		echo '"version":"1.0.0"';
 		echo '},';
 		echo '"host":"'.$_SERVER['HTTP_HOST'].'",';
