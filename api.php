@@ -2714,8 +2714,8 @@ class PHP_CRUD_API {
  $api = new PHP_CRUD_API(array(
  	'dbengine'=>'MySQL',
  	'hostname'=>'10.1.1.108',
- 	'username'=>'fg',
- 	'password'=>'1035429360',
+ 	'username'=>'fg_simu_galileo',
+ 	'password'=>'fg_simu_galileo123*',
  	'database'=>'',
  	'charset'=>'utf8mb4'
  ));
