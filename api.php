@@ -2713,8 +2713,8 @@ class PHP_CRUD_API {
 
  $api = new PHP_CRUD_API(array(
  	'dbengine'=>'MySQL',
- 	'hostname'=>'localhost',
- 	'username'=>'root',
+ 	'hostname'=>'10.1.1.108',
+ 	'username'=>'fg',
  	'password'=>'1035429360',
  	'database'=>'',
  	'charset'=>'utf8mb4'
