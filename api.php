@@ -2716,7 +2716,7 @@ class PHP_CRUD_API {
  	'hostname'=>'10.1.1.108',
  	'username'=>'db_emtelco',
  	'password'=>'db_emtelco9510*',
- 	'database'=>'',
+ 	'database'=>'m_emtelco',
  	'charset'=>'utf8mb4'
  ));
  $api->executeCommand();
