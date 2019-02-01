@@ -1,1035 +1,586 @@
+# PHP-REST-API (v2)
 
+Script PHP 7 de un solo archivo que agrega una API REST a una base de datos InnoDB MySQL 5.6. PostgreSQL 9.1 y MS SQL Server 2012 son totalmente compatibles.
 
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/feliphegomez/api-rest-php.svg)](http://isitmaintained.com/project/feliphegomez/api-rest-php "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/feliphegomez/api-rest-php.svg)](http://isitmaintained.com/project/feliphegomez/api-rest-php "Percentage of issues still open")
-[![Build Status](https://travis-ci.org/feliphegomez/api-rest-php.svg?branch=master)](https://travis-ci.org/feliphegomez/api-rest-php)
+NB: Esta es la implementaciÛn de referencia de [TreeQL](https://treeql.org) en PHP.
 
-# API Rest en PHP
-Este es un Script PHP de archivo √∫nico que agrega una API REST a una base de datos MySQL 5.5 InnoDB. PostgreSQL 9.1 y/o MS SQL Server 2012 son totalmente compatibles. Incluso hay soporte limitado para SQLite 3.
+NB: øEst·s buscando v1? Est· aquÌ: https://github.com/Feliphegomez/api-rest-php/tree/v1.0.0
 
-Pr√≥ximamente:
+## Requerimientos
 
-  - [PHP-API-AUTH](#): Compatibilidad de complemento de autenticaci√≥n JWT o nombre de usuario / contrase√±a.
-  - [PHP-SP-API](#): Script PHP de archivo √∫nico que agrega una API REST a una base de datos SQL.
-  - [PHP-CRUD-UI](#): Script PHP de archivo √∫nico que agrega una interfaz de usuario a un proyecto api-rest-php.
-  - [VUE-CRUD-UI](#): Script de archivo √∫nico Vue.js que agrega una interfaz de usuario a un proyecto api-rest-php.
+  - PHP 7.0 o superior con controladores PDO para MySQL, PgSQL o SqlSrv habilitados
+  - MySQL 5.6 / MariaDB 10.0 o superior para caracterÌsticas espaciales en MySQL
+  - PostGIS 2.0 o superior para caracterÌsticas espaciales en PostgreSQL 9.1 o superior
+  - SQL Server 2012 o superior (2017 para soporte de Linux)
 
-## Requisito
-  - PHP 5.3 o superior con MySQLi, libpq, SQLSRV o SQLite3 habilitado (se recomienda PHP 7)
-  - PHP en Windows (Cuando se conecta a SQL Server 2012)
-  - MySQL 5.6 / MariaDB 10.0 o superior para las caracter√≠sticas espaciales en MySQL
-  - PostGIS 2.0 o superior para funciones espaciales en PostgreSQL 9.1 o superior
+##  Problemas conocidos
 
-## Instalaci√≥n de la API
- Cargue el archivo "api.php" y ".htaccess" en alg√∫n lugar, configure la base de datos (Line: 2712) y disfrute!.
+- øVer los enteros como cadenas de texto? Aseg˙rese de habilitar la extensiÛn nd_pdo_mysql y deshabilite pdo_mysql .
 
-## Limitaciones de la API
-  - Las claves primarias deben ser de autoincremento (de 1 a 2 ^ 53) o UUID.
-  - Los nombres de las columnas deben ser estrictamente alfanum√©ricos, se permiten guiones / guiones bajos.
-  - Las claves compuestas primarias o externas no son compatibles.
-  - Los filtros complejos (con ambos "y" y "o") no son compatibles.
-  - Las escrituras complejas (transacciones) no son compatibles.
-  - Las consultas complejas que llaman funciones (como "concat" o "suma") no son compatibles.
-  - El motor de almacenamiento MySQL debe ser InnoDB o XtraDB.
-  - SQLite no es compatible con la funcionalidad binaria y espacial / GIS.
-  - El tipo de campo BIT MySQL no es compatible (use TINYINT).
+## InstalaciÛn
+
+Esta es una aplicaciÛn de un solo archivo! Cargue "`api.php`" en alg˙n lugar y disfrute!
+
+Para el desarrollo local, puede ejecutar el servidor web incorporado de PHP:
+
+    php -S localhost:8080/api/
+
+Pruebe el script abriendo la siguiente URL:
+
+    http://localhost:8080/api/api.php/records/posts/1
+    http://localhost:8080/api/posts/1 (si se incluye el archivo .htaccess)
+
+No olvide modificar la configuraciÛn en la parte inferior del archivo.
+
+## ConfiguraciÛn
+
+Edite las siguientes lÌneas en la parte inferior del archivo "`api.php`":
+
+    $config = new Config([
+        'username' => 'xxx',
+        'password' => 'xxx',
+        'database' => 'xxx',
+    ]);
+
+Estas son todas las opciones de configuraciÛn y su valor predeterminado entre parÈntesis:
+
+"driver": mysql , pgsql o sqlsrv ( mysql )
+"address": Nombre de host del servidor de base de datos ( localhost )
+"port": puerto TCP del servidor de la base de datos (predeterminado en el controlador predeterminado)
+"username": nombre de usuario del usuario que se conecta a la base de datos (no predeterminado)
+"password": contraseÒa del usuario que se conecta a la base de datos (no predeterminada)
+"database": Base de datos a la que se realiza la conexiÛn (no predeterminada)
+"middlewares": Lista de middlewares para cargar ( cors )
+"controllers": lista de controladores para cargar ( records,openapi )
+"openApiBase": informaciÛn de OpenAPI ( {"info":{"title":"PHP-CRUD-API","version":"1.0.0"}} )
+"cacheType": TempFile , Redis , Memcache , Memcached o NoCache ( TempFile )
+"cachePath": ruta / direcciÛn del cachÈ (por defecto al directorio temporal del sistema)
+"cacheTime": n˙mero de segundos que la memoria cachÈ es v·lida ( 10 )
+"debug": muestra los errores en el encabezado "X-Debug-Info" ( false )
+
+## Compilacion
+
+El cÛdigo reside en el directorio "`src`". Puedes acceder a ella en la URL:
+
+    http://localhost:8080/api/src/records/posts/1
+
+Puede compilar todos los archivos en un solo archivo "`api.php`" usando:
+
+    php build.php
+
+NB: La secuencia de comandos agrega las clases en orden alfabÈtico (directorios primero).
+
+## Limitaciones
+
+Estas limitaciones tambiÈn estaban presentes en v1:
+
+  - Las claves primarias deben ser de incremento autom·tico (de 1 a 2 ^ 53) o UUID
+  - Las claves primarias o externas compuestas no son compatibles
+  - No se admiten escrituras complejas (transacciones)
+  - Las consultas complejas que llaman a funciones (como "concat" o "suma") no son compatibles
+  - La base de datos debe soportar y definir restricciones de clave externa
 
 ## Caracteristicas
-  - Archivo PHP √∫nico, f√°cil de implementar.
-  - Muy poco c√≥digo, f√°cil de adaptar y mantener
-  - Transmisi√≥n de datos, baja huella de memoria
-  - Admite variables POST como entrada
-  - Admite un objeto JSON como entrada
-  - Admite una matriz JSON como entrada (inserci√≥n por lotes)
-  - Admite la carga de archivos desde formularios web (multipart / form-data)
-  - Salida JSON condensada: la primera fila contiene nombres de campo
-  - Sanitize y valida input usando callbacks
-  - Sistema de permisos para bases de datos, tablas, columnas y registros
-  - Se admiten dise√±os de bases de datos multi-tenant
-  - Soporte CORS multidominio para solicitudes entre dominios
-  - Solicitudes combinadas con soporte para m√∫ltiples nombres de tabla
-  - Soporte de b√∫squeda en m√∫ltiples criterios
-  - Paginaci√≥n, clasificaci√≥n y selecci√≥n de columna
-  - Detecci√≥n de relaciones y filtrado en claves externas
-  - Relaci√≥n "transforma" para PHP y JavaScript
-  - Soporte de incremento at√≥mico a trav√©s de PATCH (para contadores)
-  - Campos binarios admitidos con codificaci√≥n base64
-  - Campos y filtros espaciales / GIS compatibles con WKT
-  - Soporte de datos no estructurados a trav√©s de JSON / JSONB / XML
-  - Generar documentaci√≥n API utilizando herramientas Swagger
-  - Autenticaci√≥n mediante token JWT o nombre de usuario / contrase√±a (a trav√©s de [PHP-API-AUTH] (https://github.com/feliphegomez/php-api-auth))
-
-## Configuration de la API
-Edite las siguientes l√≠neas en la parte inferior del archivo "api.php":
-``` PHP
-$api = new PHP_CRUD_API(array(
-	'username'=>'xxx',
-	'password'=>'xxx',
-	'database'=>'xxx',
-));
-$api->executeCommand();
-```
-Estas son todas las opciones de configuraci√≥n y sus valores predeterminados:
-``` PHP
-$api = new PHP_CRUD_API(array(
-	'dbengine'=>'MySQL',
-	'username'=>'root',
-	'password'=>null,
-	'database'=>false,
-// for connectivity (defaults to localhost):
-	'hostname'=>null,
-	'port'=>null,
-	'socket'=>null,
-	'charset'=>'utf8',
-// callbacks with their default behavior
-	'table_authorizer'=>function($cmd,$db,$tab) { return true; },
-	'record_filter'=>function($cmd,$db,$tab) { return false; },
-	'column_authorizer'=>function($cmd,$db,$tab,$col) { return true; },
-	'tenancy_function'=>function($cmd,$db,$tab,$col) { return null; },
-	'input_sanitizer'=>function($cmd,$db,$tab,$col,$typ,$val) { return $val; },
-	'input_validator'=>function($cmd,$db,$tab,$col,$typ,$val,$ctx) { return true; },
-	'before'=>function(&$cmd,&$db,&$tab,&$id,&$in) { /* adjust array $in */ },
-	'after'=>function($cmd,$db,$tab,$id,$in,$out) { /* do something */ },
-// configurable options
-	'allow_origin'=>'*',
-	'auto_include'=>true,
-// dependencies (added for unit testing):
-	'db'=>null,
-	'method'=>$_SERVER['REQUEST_METHOD'],
-	'request'=>$_SERVER['PATH_INFO'],
-	'get'=>$_GET,
-	'post'=>file_get_contents('php://input'),
-	'origin'=>$_SERVER['HTTP_ORIGIN'],
-));
-$api->executeCommand();
-```
-
-***NOTA***: La opci√≥n "socket" no es compatible con MS SQL Server. SQLite espera el nombre del archivo en el campo "base de datos".
-
-## Documentaci√≥n
-Despu√©s de la configuraci√≥n, puede beneficiarse directamente de la documentaci√≥n API generada.
-
-    http://localhost/api.php
-
-Pruebe el [editor] (http://jsonviewer.stack.hu) para verlo r√°pidamente.
-
-## Uso de la API
-
-Puede hacer todas las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) y una operaci√≥n de Lista adicional. Aqu√≠ es c√≥mo:
-
-### Lista
-
-Lista todos los registros de una tabla de base de datos.
-
-```
-GET http://localhost/api.php/categories
-```
-
-Salida:
-
-```
-{"categories":{"columns":["id","name"],"records":[[1,"Internet"],[3,"Desarrollo Web"]]}}
-```
-
-### Lista + Transformar
-
-Enumere todos los registros de una tabla de base de datos y transf√≥rmelos en objetos.
-
-```
-GET http://localhost/api.php/categories?transform=1
-```
 
-Salida:
+Estas caracterÌsticas coinciden con las caracterÌsticas en v1 (ver rama "v1"):
+
+  - [x] Un solo archivo PHP, f·cil de implementar.
+  - [x] Muy poco cÛdigo, f·cil de adaptar y mantener.
+  - [ ] ~~TransmisiÛn de datos, bajo consumo de memoria.~~
+  - [x] Admite variables POST como entrada (x-www-form-urlencoded)
+  - [x] Admite un objeto JSON como entrada
+  - [x]  Admite una matriz JSON como entrada (inserciÛn por lotes)
+  - [ ] ~~Admite la carga de archivos desde formularios web (multipart / form-data)~~
+  - [ ] ~~Salida JSON condensada: la primera fila contiene nombres de campo~~
+  - [x] Desinfectar y validar la entrada utilizando devoluciones de llamada
+  - [x] Sistema de permisos para bases de datos, tablas, columnas y registros.
+  - [x] Los diseÒos de bases de datos multiusuario son compatibles
+  - [x] Soporte CORS multi-dominio para peticiones de dominio cruzado
+  - [x] Soporte para la lectura de resultados combinados de varias tablas.
+  - [x] Soporte de b˙squeda en m˙ltiples criterios
+  - [x] PaginaciÛn, b˙squeda, clasificaciÛn y selecciÛn de columnas.
+  - [x] DetecciÛn de relaciones con resultados anidados (belongsTo, hasMany y HABTM)
+  - [ ] ~~RelaciÛn "transforma" (de JSON condensado) para PHP y JavaScript~~
+  - [x] Soporte de incremento atÛmico mediante PATCH (para contadores)
+  - [x] Campos binarios soportados con codificaciÛn base64
+  - [x] Campos y filtros espaciales / SIG compatibles con WKT
+  - [ ] ~~Soporte de datos no estructurados a travÈs de JSON / JSONB~~
+  - [x] Generar documentaciÛn de API utilizando herramientas OpenAPI
+  - [x] AutenticaciÛn a travÈs de token JWT o nombre de usuario / contraseÒa
+  - [ ] ~~Soporte de SQLite~~
+
+ NB: Sin marca significa: a˙n no implementado. Striken significa: no ser· implementado.
+
+### CaracterÌsticas adicionales
+
+Estas caracterÌsticas son nuevas y no se incluyeron en v1.
+
+  - No refleja en cada solicitud (mejor rendimiento)
+  - Los filtros complejos (con "y" y "o") son compatibles
+  - Soporte para salida de estructura de base de datos en JSON
+  - Soporte para datos booleanos y binarios en todos los motores de bases de datos
+  - Soporte para datos relacionales en lectura (no solo en operaciÛn de lista)
+  - Soporte para middleware para modificar todas las operaciones (tambiÈn lista)
+  - Informe de errores en JSON con el estado HTTP correspondiente
+  - Soporte para autenticaciÛn b·sica y vÌa proveedor de autenticaciÛn (JWT)
+  - Soporte para funcionalidad b·sica de firewall.
+
+## Middleware
+
+Puede habilitar el siguiente middleware utilizando el par·metro de configuraciÛn "middlewares":
+
+- "firewall": limita el acceso a direcciones IP especÌficas
+- "cors": soporte para solicitudes CORS (habilitado por defecto)
+- "xsrf": Bloquee los ataques XSRF usando el mÈtodo 'Double Submit Cookie'
+- "ajaxOnly": restringe las solicitudes que no sean AJAX para evitar ataques XSRF
+- "jwtAuth": soporte para "autenticaciÛn JWT"
+- "basicAuth": Soporte para "AutenticaciÛn b·sica"
+- "authorization": restringe el acceso a ciertas tablas o columnas
+- "validation": devuelve errores de validaciÛn de entrada para reglas personalizadas
+- "sanitation": aplicar saneamiento de entrada en crear y actualizar
+- "multiTenancy": restringe el acceso de los inquilinos en un escenario con m˙ltiples inquilinos
+- "customization": proporciona controladores para la personalizaciÛn de solicitudes y respuestas
+
+El par·metro de configuraciÛn "middlewares" es una lista separada por comas de middlewares habilitados. Puede ajustar el comportamiento del middleware utilizando par·metros de configuraciÛn especÌficos del middleware:
+
+- "firewall.reverseProxy": se establece en "true" cuando se utiliza un proxy inverso ("")
+- "firewall.allowedIpAddresses": lista de direcciones IP que pueden conectarse ("")
+- "cors.allowedOrigins": los orÌgenes permitidos en los encabezados CORS ("*")
+- "cors.allowHeaders": los encabezados permitidos en la solicitud CORS ("Content-Type, X-XSRF-TOKEN")
+- "cors.allowMethods": los mÈtodos permitidos en la solicitud CORS ("OPTIONS, GET, PUT, POST, DELETE, PATCH")
+- "cors.allowCredentials": para permitir credenciales en la solicitud CORS ("true")
+- "cors.exposeHeaders": encabezados de lista blanca a los que los navegadores pueden acceder ("")
+- "cors.maxAge": el tiempo que la concesiÛn de CORS es v·lida en segundos ("1728000")
+- "xsrf.excludeMethods": los mÈtodos que no requieren la protecciÛn XSRF ("OPTIONS, GET")
+- "xsrf.cookieName": el nombre de la cookie de protecciÛn XSRF ("XSRF-TOKEN")
+- "xsrf.headerName": el nombre del encabezado de protecciÛn XSRF ("X-XSRF-TOKEN")
+- "ajaxOnly.excludeMethods": los mÈtodos que no requieren AJAX ("OPTIONS, GET")
+- "ajaxOnly.headerName": el nombre del encabezado requerido ("X-Requested-With")
+- "ajaxOnly.headerValue": el valor del encabezado requerido ("XMLHttpRequest")
+- "jwtAuth.mode": config˙relo como "opcional" si desea permitir el acceso anÛnimo ("requerido")
+- "jwtAuth.header": nombre del encabezado que contiene el token JWT ("X-AutorizaciÛn")
+- "jwtAuth.leeway": el n˙mero aceptable de segundos de inclinaciÛn del reloj ("5")
+- "jwtAuth.ttl": el n˙mero de segundos que el token es v·lido ("30")
+- "jwtAuth.secret": el secreto compartido utilizado para firmar el token JWT con ("")
+- "jwtAuth.algorithms": los algoritmos permitidos, vacÌo significa 'todos' ("")
+- "jwtAuth.audiences": las audiencias permitidas, vacÌo significa "todos" ("")
+- "jwtAuth.issuers": los emisores que est·n permitidos, vacÌo significa 'todos' ("")
+- "basicAuth.mode": config˙relo como "opcional" si desea permitir el acceso anÛnimo ("requerido")
+- "basicAuth.realm": texto que se le solicitar· al mostrar el inicio de sesiÛn ("Se requieren nombre de usuario y contraseÒa")
+- "basicAuth.passwordFile": el archivo a leer para las combinaciones de nombre de usuario / contraseÒa (".htpasswd")
+- "permission.tableHandler": controlador para implementar las reglas de autorizaciÛn de tablas ("")
+- "permission.columnHandler": controlador para implementar las reglas de autorizaciÛn de columna ("")
+- "permission.recordHandler": controlador para implementar reglas de filtro de autorizaciÛn de registros ("")
+- "validation.handler": controlador para implementar reglas de validaciÛn para valores de entrada ("")
+- "sanitation.handler": controlador para implementar reglas de saneamiento para valores de entrada ("")
+- "multiTenancy.handler": controlador para implementar reglas simples de tenencia m˙ltiple ("")
+- "customization.beforeHandler": Controlador para implementar la personalizaciÛn de la solicitud ("")
+- "customization.afterHandler": controlador para implementar la personalizaciÛn de la respuesta ("")
 
-```
-{"categories":[{"id":1,"name":"Internet"},{"id":3,"name":"Desarrollo Web"}]}
-```
+Si no especifica estos par·metros en la configuraciÛn, se utilizan los valores predeterminados (entre parÈntesis).
 
-### Lista + Filtro
+##  TreeQL, un GraphQL pragm·tico
 
-La b√∫squeda se implementa con el par√°metro "filtro". Debe especificar el nombre de columna, una coma, el tipo de coincidencia, otra coma y el valor que desea filtrar. Estos son tipos de concordancia admitidos:
+TreeQL le permite crear un "·rbol" de objetos JSON en funciÛn de la estructura (relaciones) de la base de datos SQL y su consulta.
 
-  - cs: contener cadena (cadena contiene valor)
-  - sw: comienza con (cadena comienza con valor)
-  - ew: final con (cadena final con valor)
-  - eq: igual (cadena o n√∫mero coincide exactamente)
-  - lt: menor que (el n√∫mero es menor que el valor)
-  - le: menor o igual (el n√∫mero es menor o igual que el valor)
-  - ge: mayor o igual (el n√∫mero es mayor o igual que el valor)
-  - gt: mayor que (el n√∫mero es m√°s alto que el valor)
-  - bt: between (el n√∫mero est√° entre dos valores separados por comas)
-  - in: in (el n√∫mero o cadena est√° en una lista de valores separados por comas)
-  - is: is null (el campo contiene el valor "NULL")
+Se basa libremente en el est·ndar REST y tambiÈn est· inspirado en json: api.
 
-Puede negar todos los filtros anteponiendo un car√°cter 'n', de modo que 'eq' se convierte en 'neq'.
+### CRUD + Lista
 
-```
-GET http://localhost/api.php/categories?filter=name,eq,Internet
-GET http://localhost/api.php/categories?filter=name,sw,Inter
-GET http://localhost/api.php/categories?filter=id,le,1
-GET http://localhost/api.php/categories?filter=id,ngt,2
-GET http://localhost/api.php/categories?filter=id,bt,1,1
-GET http://localhost/api.php/categories?filter=categories.id,eq,1
-```
+La tabla de publicaciones de ejemplo tiene solo unos pocos campos:
 
-Salida:
+    posts  
+    =======
+    id     
+    title  
+    content
+    created
 
-```
-{"categories":{"columns":["id","name"],"records":[[1,"Internet"]]}}
-```
+Las siguientes operaciones de la lista CRUD + act˙an en esta tabla.
 
-***Nota***: Puede especificar el nombre de la tabla antes del nombre del campo, separado por un punto.
+#### Crear
 
-### List + Filter + Cumplir
+Si desea crear un registro, la solicitud se puede escribir en formato de URL como:
 
-Se pueden aplicar m√∫ltiples filtros usando "filtro []" en lugar de "filtro" como nombre de par√°metro. A continuaci√≥n, el par√°metro "satisfy" se utiliza para indicar si se debe cumplir con el filtro [all] "todos" (predeterminado) o [any] "cualquiera" para generar una coincidencia:
+    POST /records/posts
 
-```
-GET http://localhost/api.php/categories?filter[]=id,eq,1&filter[]=id,eq,3&satisfy=any
-GET http://localhost/api.php/categories?filter[]=id,ge,1&filter[]=id,le,3&satisfy=all
-GET http://localhost/api.php/categories?filter[]=id,ge,1&filter[]=id,le,3&satisfy=categories.all
-GET http://localhost/api.php/categories?filter[]=id,ge,1&filter[]=id,le,3
-```
+Tienes que enviar un cuerpo que contiene:
 
-Salida:
+    {
+        "title": "Black is the new red",
+        "content": "This is the second post.",
+        "created": "2018-03-06T21:34:01Z"
+    }
 
-```
-{"categories":{"columns":["id","name"],"records":[[1,"Internet"],[3,"Desarollo Web"]]}}
-```
+Y devolver· el valor de la clave principal del registro reciÈn creado:
 
-***Nota***: Puede especificar "satisfy = categories.all, posts.any" si quiere mezclar "y" y "o" para diferentes tablas.
+    2
 
+#### Leer
 
-### Lista + Seleccionar Columna
+Para leer un registro de esta tabla, la solicitud se puede escribir en formato de URL como:
 
-La selecci√≥n de columnas Por defecto, todas las columnas est√°n seleccionadas. Con el par√°metro "columns" puede seleccionar columnas espec√≠ficas. Las columnas m√∫ltiples deben estar separadas por comas.
-Se puede usar un asterisco ("*") como un comod√≠n para indicar "todas las columnas". Similar a "columns" puede usar el par√°metro "exclude" para eliminar ciertas columnas:
-```
-GET http://localhost/api.php/categories?columns=name
-GET http://localhost/api.php/categories?columns=categories.name
-GET http://localhost/api.php/categories?exclude=categories.id
-```
+    GET /records/posts/1
 
-Salida:
+Donde "1" es el valor de la clave principal del registro que desea leer. Volver·
 
-```
-{"categories":{"columns":["name"],"records":[["Desarrollo Web"],["Internet"]]}}
-```
+    {
+        "id": 1
+        "title": "Hello world!",
+        "content": "Welcome to the first post.",
+        "created": "2018-03-05T20:12:56Z"
+    }
 
-***Nota***: Las columnas que se utilizan para incluir entidades relacionadas se agregan autom√°ticamente y no se pueden dejar fuera de la salida.
+En las operaciones de lectura puede aplicar uniones.
 
-### Lista + Orden
+#### Actualizar
 
-Con el par√°metro "order" puede ordenar. Por defecto, el orden est√° en orden ascendente, pero al especificar "desc" esto puede invertirse:
+Para actualizar un registro en esta tabla, la solicitud se puede escribir en formato de URL como:
 
-```
-GET http://localhost/api.php/categories?order=name,desc
-GET http://localhost/api.php/posts?order[]=icon,desc&order[]=name
-```
+    PUT /records/posts/1
 
-Salida:
+Donde "1" es el valor de la clave principal del registro que desea actualizar. Enviar como un cuerpo:
 
-```
-{"categories":{"columns":["id","name"],"records":[[3,"Desarrollo Web"],[1,"Internet"]]}}
-```
+    {
+        "title": "Adjusted title!"
+    }
 
-***Nota***: Puede ordenar m√∫ltiples campos usando "order[]" en lugar de "order" como nombre de par√°metro.
+Esto ajusta el tÌtulo del post. Y el valor de retorno es el n˙mero de filas que se establecen:
 
-### Lista + Orden + Paginaci√≥n
+    1
 
-El par√°metro "page" contiene la p√°gina solicitada. El tama√±o de p√°gina predeterminado es 20, pero se puede ajustar (por ejemplo, a 50):
+#### Borrar
 
-```
-GET http://localhost/api.php/categories?order=id&page=1
-GET http://localhost/api.php/categories?order=id&page=1,50
-```
+Si desea eliminar un registro de esta tabla, la solicitud se puede escribir en formato de URL como:
 
-Salida:
+    DELETE /records/posts/1
 
-```
-{"categories":{"columns":["id","name"],"records":[[1,"Internet"],[3,"Desarrollo Web"]],"results":2}}
-```
+Y devolver· el n˙mero de filas eliminadas:
 
-***Nota***: Las p√°ginas que no est√°n ordenadas no pueden ser paginadas.
+    1
 
-### Crear
+#### Lista
 
-Puede agregar f√°cilmente un registro utilizando el m√©todo POST (x-www-form-urlencoded, consulte rfc1738). La llamada devuelve la "last insert id".
+Para listar los registros de esta tabla, la solicitud se puede escribir en formato de URL como:
 
-```
-POST http://localhost/api.php/categories
-id=1&name=Internet
-```
+    GET /records/posts
 
-Salida:
+Volver·
 
-```
-1
-```
-
-***Nota***: Tenga en cuenta que los campos que no est√°n especificados en la solicitud obtienen el valor predeterminado como se especifica en la base de datos.
-
-### Crear (con el objeto JSON)
-
-Alternativamente, puede enviar un objeto JSON en el cuerpo. La llamada devuelve la "last insert id".
-
-```
-POST http://localhost/api.php/categories
-{"id":1,"name":"Internet"}
-```
-
-Salida:
-
-```
-1
-```
-
-***Nota***: Tenga en cuenta que los campos que no est√°n especificados en la solicitud obtienen el valor predeterminado como se especifica en la base de datos.
-
-### Crear (con matriz JSON)
-
-Alternativamente, puede enviar una matriz JSON que contenga m√∫ltiples objetos JSON en el cuerpo. La llamada devuelve una matriz de valores de "last insert id".
-
-```
-POST http://localhost/api.php/categories
-[{"name":"Internet"},{"name":"Programaci√≥n"},{"name":"Desarrollo Web"}]
-```
-
-Salida:
-
-```
-[1,2,3]
-```
-
-***Nota***: Esta llamada usa una transacci√≥n e insertar√° todos o ninguno de los registros. Si la transacci√≥n falla, devolver√° 'null'.
-
-### Leer
-
-Si quiere leer un solo objeto, puede usar:
-
-```
-GET http://localhost/api.php/categories/1
-```
-
-Salida:
-
-```
-{"id":1,"name":"Internet"}
-```
-
-### Leer (Multiples)
-
-Si quiere leer m√∫ltiples objetos, puede usar:
-
-```
-GET http://localhost/api.php/categories/1,2
-```
-
-Salida:
-
-```
-[{"id":1,"name":"Internet"},{"id":2,"name":"Programac√≠on"}]
-```
-
-### Actualizar
-
-La edici√≥n de un registro se realiza con el m√©todo PUT. La llamada devuelve el n√∫mero de filas afectadas.
-
-```
-PUT http://localhost/api.php/categories/2
-name=Internet+networking
-```
-
-Salida:
-
-```
-1
-```
-
-***Nota***: Tenga en cuenta que solo se actualizar√°n los campos que se especifican en la solicitud.
-
-### Actualizaci√≥n (con el objeto JSON)
-
-Alternativamente, puede enviar un objeto JSON en el cuerpo. La llamada devuelve el n√∫mero de filas afectadas.
-
-```
-PUT http://localhost/api.php/categories/2
-{"name":"Redes de Internet"}
-```
-
-Salida:
-
-```
-1
-```
-
-***Nota***: Tenga en cuenta que solo se actualizar√°n los campos que se especifican en la solicitud.
-
-### Actualizaci√≥n (con matriz JSON)
-
-Alternativamente, puede enviar una matriz JSON que contenga m√∫ltiples objetos JSON en el cuerpo. La llamada devuelve una matriz de las filas afectadas.
-
-```
-PUT http://localhost/api.php/categories/1,2
-[{"name":"Internet"},{"name":"Programac√≠on"}]
-```
-
-Salida:
-
-```
-[1,1]
-```
-
-***Nota***: El n√∫mero de valores de clave primaria en la URL debe coincidir con la cantidad de elementos en la matriz JSON (y debe estar en el mismo orden).
-
-Esta llamada usa una transacci√≥n y actualizar√° todos o ninguno de los registros. Si la transacci√≥n falla, devolver√° 'null'.
-
-### Borrar
-
-La solicitud tipo DELETE se usa para eliminar un registro. La llamada devuelve el n√∫mero de filas afectadas.
-
-```
-DELETE http://localhost/api.php/categories/2
-```
-
-Salida:
-
-```
-1
-```
-
-### Eliminar (m√∫ltiples)
-
-La solicitud tipo DELETE tambi√©n se puede usar para borrar m√∫ltiples registros. La llamada devuelve el n√∫mero de filas afectadas para cada valor de clave principal especificado en la URL.
-
-```
-DELETE http://localhost/api.php/categories/1,2
-```
-
-Salida:
-
-```
-[1,1]
-```
-
-Esta llamada usa una transacci√≥n y eliminar√° todos o ninguno de los registros. Si la transacci√≥n falla, devolver√° 'null'.
-
-## Relaciones
-
-La explicaci√≥n de esta caracter√≠stica se basa en la estructura de datos del archivo de base de datos `` `blog.sql```. Esta base de datos es una estructura de datos de blog muy simple con las correspondientes relaciones de clave externa entre las tablas. Estas restricciones de clave externa son necesarias ya que la detecci√≥n de relaci√≥n se basa en ellas, no en el nombre de la columna.
-
-Puede obtener la "publicaci√≥n" que tiene "id" igual a "1" con sus correspondientes "categor√≠as", "etiquetas" y "comentarios" usando:
-
-```
-GET http://localhost/api.php/posts?include=categories,tags,comments&filter=id,eq,1
-```
-
-Salida:
-
-```
-{
-    "posts": {
-        "columns": [
-            "id",
-            "user_id",
-            "category_id",
-            "content"
-        ],
-        "records": [
-            [
-                1,
-                1,
-                1,
-                "blog started"
-            ]
-        ]
-    },
-    "post_tags": {
-        "relations": {
-            "post_id": "posts.id"
-        },
-        "columns": [
-            "id",
-            "post_id",
-            "tag_id"
-        ],
-        "records": [
-            [
-                1,
-                1,
-                1
-            ],
-            [
-                2,
-                1,
-                2
-            ]
-        ]
-    },
-    "categories": {
-        "relations": {
-            "id": "posts.category_id"
-        },
-        "columns": [
-            "id",
-            "name"
-        ],
-        "records": [
-            [
-                1,
-                "anouncement"
-            ]
-        ]
-    },
-    "tags": {
-        "relations": {
-            "id": "post_tags.tag_id"
-        },
-        "columns": [
-            "id",
-            "name"
-        ],
-        "records": [
-            [
-                1,
-                "funny"
-            ],
-            [
-                2,
-                "important"
-            ]
-        ]
-    },
-    "comments": {
-        "relations": {
-            "post_id": "posts.id"
-        },
-        "columns": [
-            "id",
-            "post_id",
-            "message"
-        ],
-        "records": [
-            [
-                1,
-                1,
-                "great"
-            ],
-            [
-                2,
-                1,
-                "fantastic"
-            ]
+    {
+        "records":[
+            {
+                "id": 1,
+                "title": "Hello world!",
+                "content": "Welcome to the first post.",
+                "created": "2018-03-05T20:12:56Z"
+            }
         ]
     }
-}
+
+En las operaciones de lista puede aplicar filtros y uniones.
+
+### Filtros
+
+Los filtros proporcionan la funcionalidad de b˙squeda, en las llamadas de lista, utilizando el par·metro "filtro". Debe especificar el nombre de la columna, una coma, el tipo de coincidencia, otra coma y el valor que desea filtrar. Estos son tipos de concordancia soportados:
+
+  - "cs": contiene cadena (cadena contiene valor)
+  - "sw": comienza con (la cadena comienza con el valor)
+  - "ew": termina con (final de cadena con valor)
+  - "eq": igual (la cadena o el n˙mero coinciden exactamente)
+  - "lt": menor que (el n˙mero es menor que el valor)
+  - "le": menor o igual (el n˙mero es menor o igual al valor)
+  - "ge": mayor o igual (el n˙mero es mayor o igual que el valor)
+  - "gt": mayor que (el n˙mero es mayor que el valor)
+  - "bt": entre (el n˙mero est· entre dos valores separados por comas)
+  - "in": in (el n˙mero o la cadena est· en una lista de valores separados por comas)
+  - "is": es nulo (el campo contiene el valor "NULL")
+
+Puede negar todos los filtros al anteponer un car·cter "n", de modo que "eq" se convierta en "neq". Ejemplos de uso del filtro son:
+
+    GET /records/categories?filter=name,eq,Internet
+    GET /records/categories?filter=name,sw,Inter
+    GET /records/categories?filter=id,le,1
+    GET /records/categories?filter=id,ngt,2
+    GET /records/categories?filter=id,bt,1,1
+
+Salida:
+
+    {
+        "records":[
+            {
+                "id": 1
+                "name": "Internet"
+            }
+        ]
+    }
+
+En la siguiente secciÛn profundizaremos en cÛmo puede aplicar varios filtros en una sola llamada de lista.
+
+### Filtros m˙ltiples
+
+Los filtros pueden aplicarse aplicando el par·metro "filtro" en la URL. Por ejemplo la siguiente URL:
+
+    GET /records/categories?filter=id,gt,1&filter=id,lt,3
+
+solicitar· todas las categorÌas "donde id> 1 e id <3". Si quieres "where id = 2 o id = 4" debes escribir:
+
+    GET /records/categories?filter1=id,eq,2&filter2=id,eq,4
+    
+Como ve, agregamos un n˙mero al par·metro "filtro" para indicar que se debe aplicar "OR" en lugar de "AND". Tenga en cuenta que tambiÈn puede repetir "filter1" y crear un "AND" dentro de un "OR". Ya que tambiÈn puede ir un nivel m·s profundo agregando una letra (af) puede crear casi cualquier ·rbol de condiciÛn razonablemente complejo.
+
+NB: solo puede filtrar en la tabla solicitada (no incluida en ella) y los filtros solo se aplican en la lista de llamadas.
+
+### SelecciÛn de columna
+
+Por defecto, todas las columnas est·n seleccionadas. Con el par·metro "incluir" puede seleccionar columnas especÌficas. Puede usar un punto para separar el nombre de la tabla del nombre de la columna. Las columnas m˙ltiples deben estar separadas por comas. Se puede utilizar un asterisco ("*") como comodÌn para indicar "todas las columnas". Similar a "incluir" puede usar el par·metro "excluir" para eliminar ciertas columnas:
+
+```
+GET /records/categories/1?include=name
+GET /records/categories/1?include=categories.name
+GET /records/categories/1?exclude=categories.id
 ```
 
-Puede llamar a la funci√≥n `` `php_crud_api_transform()` `` para estructurar los datos jer√°rquicos de esta manera:
+Salida:
 
 ```
-{
-    "posts": [
-        {
-            "id": 1,
-            "post_tags": [
-                {
-                    "id": 1,
-                    "post_id": 1,
-                    "tag_id": 1,
-                    "tags": [
-                        {
-                            "id": 1,
-                            "name": "funny"
-                        }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "post_id": 1,
-                    "tag_id": 2,
-                    "tags": [
-                        {
-                            "id": 2,
-                            "name": "important"
-                        }
-                    ]
-                }
-            ],
-            "comments": [
-                {
-                    "id": 1,
-                    "post_id": 1,
-                    "message": "great"
-                },
-                {
-                    "id": 2,
-                    "post_id": 1,
-                    "message": "fantastic"
-                }
-            ],
-            "user_id": 1,
-            "category_id": 1,
-            "categories": [
-                {
-                    "id": 1,
-                    "name": "anouncement"
-                }
-            ],
-            "content": "blog started"
-        }
+    {
+        "name": "Internet"
+    }
+```
+
+NB: las columnas que se utilizan para incluir entidades relacionadas se agregan autom·ticamente y no se pueden dejar fuera de la salida.
+
+### Ordenando
+
+Con el par·metro "orden" se puede ordenar. Por defecto, la clasificaciÛn est· en orden ascendente, pero al especificar "desc" esto se puede revertir:
+
+```
+GET /records/categories?order=name,desc
+GET /records/categories?order=id,desc&order=name
+```
+
+Salida:
+
+```
+    {
+        "records":[
+            {
+                "id": 3
+                "name": "Web development"
+            },
+            {
+                "id": 1
+                "name": "Internet"
+            }
+        ]
+    }
+```
+
+NB: Puede ordenar en m˙ltiples campos utilizando m˙ltiples par·metros de "orden". No se puede ordenar en columnas "unidas".
+
+### PaginaciÛn
+
+El par·metro "p·gina" contiene la p·gina solicitada. El tamaÒo de p·gina predeterminado es 20, pero se puede ajustar (por ejemplo, a 50):
+
+```
+GET /records/categories?order=id&page=1
+GET /records/categories?order=id&page=1,50
+```
+
+Salida:
+
+```
+    {
+        "records":[
+            {
+                "id": 1
+                "name": "Internet"
+            },
+            {
+                "id": 3
+                "name": "Web development"
+            }
+        ],
+        "results": 2
+    }
+```
+
+NB: las p·ginas que no est·n ordenadas no pueden paginarse.
+
+### Uniones / JOIN
+
+Digamos que usted tiene una tabla de publicaciones que tiene comentarios (realizados por los usuarios) y que las publicaciones pueden tener etiquetas.
+
+    posts    comments  users     post_tags  tags
+    =======  ========  =======   =========  ======= 
+    id       id        id        id         id
+    title    post_id   username  post_id    name
+    content  user_id   phone     tag_id
+    created  message
+
+Cuando desee enumerar las publicaciones con sus usuarios y etiquetas de comentarios, puede solicitar dos rutas de "·rbol":
+
+    posts -> comments  -> users
+    posts -> post_tags -> tags
+
+Estas rutas tienen la misma raÌz y esta solicitud se puede escribir en formato de URL como:
+
+    GET /records/posts?join=comments,users&join=tags
+
+AquÌ puede omitir la tabla intermedia que vincula las publicaciones a las etiquetas. En este ejemplo, ver· los tres tipos de relaciones de tabla (hasMany, belongsTo y hasAndBelongsToMany) en efecto:
+
+- "post" has many "comments"
+- "comment" belongs to "user"
+- "post" has and belongs to many "tags"
+
+Esto puede llevar a los siguientes datos JSON:
+
+    {
+        "records":[
+            {
+                "id": 1,
+                "title": "Hello world!",
+                "content": "Welcome to the first post.",
+                "created": "2018-03-05T20:12:56Z",
+                "comments": [
+                    {
+                        id: 1,
+                        post_id: 1,
+                        user_id: {
+                            id: 1,
+                            username: "mevdschee",
+                            phone: null,
+                        },
+                        message: "Hi!"
+                    },
+                    {
+                        id: 2,
+                        post_id: 1,
+                        user_id: {
+                            id: 1,
+                            username: "mevdschee",
+                            phone: null,
+                        },
+                        message: "Hi again!"
+                    }
+                ],
+                "tags": []
+            },
+            {
+                "id": 2,
+                "title": "Black is the new red",
+                "content": "This is the second post.",
+                "created": "2018-03-06T21:34:01Z",
+                "comments": [],
+                "tags": [
+                    {
+                        id: 1,
+                        message: "Funny"
+                    },
+                    {
+                        id: 2,
+                        message: "Informational"
+                    }
+                ]
+            }
+        ]
+    }
+
+Ver· que se detectan las relaciones "belongsTo" y el valor al que se hace referencia reemplaza el valor de la clave externa. En el caso de "hasMany" y "hasAndBelongsToMany", el nombre de la tabla se utiliza una nueva propiedad en el objeto.
+
+NB: debe crear una restricciÛn de clave externa para que la uniÛn funcione.
+
+### Operaciones por lotes
+
+Cuando desee crear, leer, actualizar o eliminar, puede especificar varios valores de clave principal en la URL. TambiÈn debe enviar una matriz en lugar de un objeto en el cuerpo de la solicitud para crear y actualizar. 
+
+Para leer un registro de esta tabla, la solicitud se puede escribir en formato de URL como:
+
+    GET /records/posts/1,2
+
+El resultado puede ser:
+
+    [
+            {
+                "id": 1,
+                "title": "Hello world!",
+                "content": "Welcome to the first post.",
+                "created": "2018-03-05T20:12:56Z"
+            },
+            {
+                "id": 2,
+                "title": "Black is the new red",
+                "content": "This is the second post.",
+                "created": "2018-03-06T21:34:01Z"
+            }
     ]
-}
-```
 
-***Nota***: Esta funci√≥n de transformaci√≥n est√° disponible para PHP, JavaScript y Python en los archivos `` `php_crud_api_transform.php```,``` php_crud_api_transform.js``` y ```php_crud_api_transform.py``` en la carpeta " lib ".
+De forma similar, cuando desea realizar una actualizaciÛn por lotes, la solicitud en formato de URL se escribe como:
 
-## Permisos
+    PUT /records/posts/1,2
 
-Por defecto, una sola base de datos se expone con todas sus tablas y columnas en modo de lectura-escritura. Puede cambiar los permisos especificando una funci√≥n 'table_authorizer' y / o 'column_authorizer' que devuelve un booleano que indica si la tabla o columna est√° permitida para una acci√≥n CRUD espec√≠fica.
+Donde "1" y "2" son los valores de las claves primarias de los registros que desea actualizar. El cuerpo debe contener el mismo n˙mero de objetos, ya que hay claves primarias en la URL:
 
-## Filtro de registro
+    [   
+        {
+            "title": "Adjusted title for ID 1"
+        },
+        {
+            "title": "Adjusted title for ID 2"
+        }        
+    ]
 
-Al definir una funci√≥n 'record_filter' puede aplicar un filtro forzado, por ejemplo para implementar roles en un sistema de base de datos.
+This adjusts the titles of the posts. And the return values are the number of rows that are set:
 
-La regla "you cannot view unpublished blog posts unless you have the admin role"/"no puede ver publicaciones de blog no publicadas a menos que tenga la funci√≥n de administrador" se puede implementar con este filtro.
+    1,1
 
-```
-return ($table=='posts' && $_SESSION['role']!='admin')?array('published,nis,null'):false;
-```
+Esto ajusta los tÌtulos de los mensajes. Y los valores de retorno son el n˙mero de filas que se establecen:
 
-## Multiple Tendencia
+### Lo que significa que habÌa dos operaciones de actualizaciÛn y cada una de ellas habÌa establecido una fila. Las operaciones por lotes utilizan las transacciones de la base de datos, por lo que todas tienen Èxito o todas fallan (las exitosas se devuelven).
 
-El 'tenancy_function' le permite exponer una API para un esquema de base de datos de m√∫ltiples usuarios. En el modelo m√°s simple todas las tablas tienen una columna llamada 'customer_id' y la 'tenancy_function' se define como:
+Para el soporte espacial hay un conjunto adicional de filtros que se pueden aplicar en las columnas de geometrÌa y que comienzan con una "s":
 
-```
-return $col=='customer_id'?$_SESSION['customer_id']:null
-```
+- "sco": contiene espacial (la geometrÌa contiene otra)
+- "scr": cruces espaciales (la geometrÌa cruza otra)
+- "sdi": separaciÛn espacial (la geometrÌa es diferente de otra)
+- "seq": espacial igual (la geometrÌa es igual a otra)
+- "pecado": intersecciones espaciales (la geometrÌa se interseca con otra)
+- "sov": superposiciones espaciales (la geometrÌa se superpone a otra)
+- "sto": toques espaciales (la geometrÌa toca a otra)
+- "swi": espacial dentro (la geometrÌa est· dentro de otra)
+- "sic": el espacio est· cerrado (la geometrÌa es cerrada y simple)
+- "sis": espacial es simple (la geometrÌa es simple)
+- "siv": el espacio es v·lido (la geometrÌa es v·lida)
 
-En este ejemplo, `` `$ _SESSION ['customer_id']` `` es el cliente autenticado en su API.
+Estos filtros se basan en los est·ndares OGC y tambiÈn lo es la especificaciÛn WKT en la que se representan las columnas de geometrÌa.
 
-## Sanitizaci√≥n de entrada
+### AutenticaciÛn
 
-Por defecto, todas las entradas son aceptadas y enviadas a la base de datos. Si desea desnudar (ciertas) etiquetas HTML antes de almacenarlas, puede especificar un funci√≥n 'input_sanitizer' que devuelve el valor ajustado.
+La autenticaciÛn se realiza mediante el envÌo de un encabezado de "AutorizaciÛn". Identifica al usuario y lo almacena en el $_SESSION super global. Esta variable se puede usar en los controladores de autorizaciÛn para decidir si o no sombeody deberÌa tener acceso de lectura o escritura a ciertas tablas, columnas o registros. Actualmente hay dos tipos de autenticaciÛn admitidos: "B·sico" y "JWT". Esta funcionalidad se habilita agregando el middleware 'basicAuth' y / o 'jwtAuth'.
 
-## Validaci√≥n de entrada
+#### utenticaciÛn b·sica
 
-Por defecto, todas las entradas son aceptadas. Si desea validar la entrada, puede especificar una funci√≥n 'input_validator' que devuelve un booleano indicando si el valor es v√°lido o no.
+El tipo B·sico es compatible con un archivo que contiene a los usuarios y sus contraseÒas (con hash) separadas por dos puntos (':'). Cuando las contraseÒas se ingresan en texto sin formato, se llenan autom·ticamente. El nombre de usuario autenticado se almacenar· en la $_SESSION['username'] . Debe enviar un encabezado de "AutorizaciÛn" que contenga un nombre de usuario y una contraseÒa codificados en base64 url ??y separados por dos puntos despuÈs de la palabra "B·sico".
 
-## Multiple Base de datos
+    Authorization: Basic dXNlcm5hbWUxOnBhc3N3b3JkMQ
 
-El c√≥digo tambi√©n es compatible con API de varias bases de datos. Estos tienen URL donde el primer segmento en la ruta es la base de datos y no el nombre de la tabla.
-Esto se puede habilitar al NO especificar una base de datos en la configuraci√≥n. Adem√°s, los permisos en la configuraci√≥n deben contener un punto que es el car√°cter para separar la base de datos del nombre de la tabla. Las bases de datos 'mysql', 'information_schema' y 'sys' se bloquean autom√°ticamente.
+Este ejemplo envÌa la cadena "username1:password1".
 
-## Incremento at√≥mico (para contadores)
+#### AutenticaciÛn JWT
 
-El aumento del campo num√©rico de un registro se realiza con el m√©todo PATCH (se ignoran los campos no num√©ricos).
-El decremento se puede hacer usando un valor de incremento negativo.
-Para agregar '2' al campo 'visitantes' en la tabla de 'eventos' para registrar con la clave principal '1', ejecute:
+El tipo JWT requiere que otro servidor (SSO / Identity) firme un token que contiene notificaciones. Ambos servidores comparten un secreto para que puedan firmar o verificar que la firma es v·lida. Las reclamaciones se almacenan en la $_SESSION['claims'] . Debe enviar un encabezado de "AutorizaciÛn X" que contenga un encabezado, cuerpo y firma de token con codificaciÛn url base64, cuerpo y firma despuÈs de la palabra "Portador" ( lea m·s sobre JWT aquÌ ). El est·ndar dice que necesita usar el encabezado "AutorizaciÛn", pero esto es problem·tico en Apache y PHP.
 
-```
-PATCH http://localhost/api.php/events/1
-{"visitors":2}
-```
+    X-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6IjE1MzgyMDc2MDUiLCJleHAiOjE1MzgyMDc2MzV9.Z5px_GT15TRKhJCTHhDt5Z6K6LRDSFnLj8U5ok9l7gw
 
-Salida:
+Este ejemplo envÌa las reclamaciones firmadas:
 
-```
-1
-```
-
-La llamada devuelve el n√∫mero de filas afectadas. Tenga en cuenta que se pueden incrementar m√∫ltiples campos y que las operaciones por lotes son compatibles (ver: actualizaci√≥n / PUT).
-
-## Datos binarios
-
-
-Los campos binarios se detectan autom√°ticamente y los datos en esos campos se devuelven utilizando la codificaci√≥n base64.
-
-```
-GET http://localhost/api.php/categories/2
-```
-
-Salida:
-
-```
-{"id":2,"name":"funny","icon":"ZGF0YQ=="}
-```
-
-Al enviar un registro que contiene un campo binario, tambi√©n deber√° enviar datos codificados en base64.
-
-```
-PUT http://localhost/api.php/categories/2
-icon=ZGF0YQ
-```
-
-En el ejemplo anterior, ver√° c√≥mo se env√≠an los datos binarios. Tanto "base64url" como "base64" est√°ndar est√°n permitidos (ver rfc4648).
-
-## Cargas de archivos
-
-Tambi√©n puede cargar un archivo usando un formulario web (multipart / form-data) como este:
-
-```
-<form method="post" action="http://localhost/api.php/categories" enctype="multipart/form-data">
-  Select image to upload:
-  <input type="file" name="icon">
-  <input type="submit">
-</form>
-```
-
-Entonces esto se maneja como si hubiera enviado:
-
-```
-POST http://localhost/api.php/categories
-{"icon_name":"not.gif","icon_type":"image\/gif","icon":"ZGF0YQ==","icon_error":0,"icon_size":4}
-```
-
-Como puede ver, se agregan los metacaps "xxx_name", "xxx_type", "xxx_error" y "xxx_size" (donde "xxx" es el nombre del campo del archivo).
-
-***Nota***: No puede editar un archivo con este m√©todo, porque los navegadores no admiten el m√©todo "PUT" en estos formularios.
-
-## Soporte espacial / GIS
-
-Tambi√©n hay soporte para filtros espaciales:
-    - sco: espacial contiene (la geometr√≠a contiene otra)
-    - scr: cruces espaciales (la geometr√≠a se cruza con otra)
-    - sdi: disjuntos espaciales (la geometr√≠a es disjunta de otro)
-    - seq: espacial igual (la geometr√≠a es igual a otra)
-    - sin: intersecciones espaciales (la geometr√≠a se cruza con otra)
-    - sov: superposiciones espaciales (la geometr√≠a se superpone a otra)
-    - sto: toques espaciales (la geometr√≠a toca a otra)
-    - swi: espacial dentro (la geometr√≠a est√° dentro de otra)
-    - sic: espacial est√° cerrado (la geometr√≠a es cerrada y simple)
-    - sis: espacial es simple (la geometr√≠a es simple)
-    - siv: espacial es v√°lido (la geometr√≠a es v√°lida)
-
-Tambi√©n puede negar estos filtros anteponiendo un car√°cter 'n', de modo que 'sco' se convierta en 'nsco'.
-
-Ejemplo:
-
-```
-GET http://localhost/api.php/countries?columns=name,shape&filter[]=shape,sco,POINT(30 20)
-```
-
-Salida:
-
-```
-{"countries":{"columns":["name","shape"],"records":[["Italy","POLYGON((30 10,40 40,20 40,10 20,30 10))"]]}}
-```
-
-Al enviar un registro que contiene un campo de geometr√≠a (espacial), tambi√©n deber√° enviar una cadena WKT.
-
-```
-PUT http://localhost/api.php/users/1
-{"location":"POINT(30 20)"}
-```
-
-En el ejemplo anterior, ver√° c√≥mo se env√≠a una [secuencia WKT] (https://en.wikipedia.org/wiki/Well-known_text).
-
-## Soporte de datos no estructurados
-
-Puede almacenar documentos JSON en tipos de campo JSON (MySQL), JSONB (PostgreSQL) o XML (SQL Server) en la base de datos.
-Estos documentos no tienen esquema. El espacio en blanco en la estructura no se mantiene.
-
-## Enviando NULL
-
-Al utilizar el m√©todo POST (x-www-form-urlencoded, consulte rfc1738), se puede establecer un valor NULL de base de datos usando un par√°metro con el sufijo "__is_null":
-
-```
-PUT http://localhost/api.php/categories/2
-name=Internet&icon__is_null
-```
-
-Al enviar datos JSON, el env√≠o de un valor NULL para un campo de base de datos con nulos es m√°s f√°cil ya que puede usar el valor "null" de JSON (sin comillas).
-
-```
-PUT http://localhost/api.php/categories/2
-{"name":"Internet","icon":null}
-```
-
-## Campos autom√°ticos
-
-Antes de cualquier operaci√≥n, se llama a la funci√≥n 'before' que le permite configurar algunos campos autom√°ticos.
-Tenga en cuenta que el par√°metro 'input' es escribible y es un objeto (o 'falso' cuando falta o no es v√°lido).
-
-## Eliminaci√≥n suave
-
-La funci√≥n 'before' permite la modificaci√≥n de los par√°metros de solicitud y puede (por ejemplo) utilizarse para implementar el comportamiento de eliminaci√≥n de software.
-
-```php
-'before'=>function(&$cmd, &$db, &$tab, &$id, &$in) { 
-	if ($cmd == 'delete') {
-		$cmd = 'update'; // change command to update
-		$in = (object)array('deleted' => date('Y-m-d H:i:s', time()));
-	}
-},
-'column_authorizer'=>function($cmd, $db ,$tab, $col) { 
-	return ( ! in_array($col, array('deleted')));
-},
-'record_filter'=>function($cmd,$db,$tab) { 
-	return array('deleted,is,null');
-}
-```
-
-## Custom actions
-
-After any operation the 'after' function is called that allows you to do some custom actions.
-Note that the output parameter is not filled for 'read' or 'list' operations due to the streaming nature of the API.
-
-## CORS multidominio
-
-Al especificar `allow_origin` en la configuraci√≥n, puede controlar el encabezado de respuesta` Access-Control-Allow-Origin` que se est√° enviando.
-
-Si establece `allow_origin` en` * `, el encabezado de respuesta` Access-Control-Allow-Origin` se establecer√° en `*`.
-En todos los dem√°s casos, el encabezado de respuesta `Access-Control-Allow-Origin` se establece en el valor del encabezado de solicitud` Origin` cuando se encuentra una coincidencia.
- 
-Tambi√©n puede especificar `allow_origin` a `https://*.yourdomain.com` que coincida con cualquier host que comience por `https://` y termine en `.yourdomain.com`.
-
-Se pueden especificar m√∫ltiples hosts mediante una coma, lo que le permite establecer `allow_origin` en` https://tudominio.com, https://*.tudominio.com`
-
-## Enteros de 64 bits en JavaScript
-
-JavaScript no admite enteros de 64 bits. Todos los n√∫meros se almacenan como valores de punto flotante de 64 bits. La mantisa de un punto flotante de 64 bits
-el n√∫mero es solo de 53 bits y es por eso que todos los n√∫meros enteros mayores a 53 bits pueden causar problemas en JavaScript.
-
-## Errores
-
-Se pueden informar los siguientes tipos de errores 404 'No encontrado':
-
-    - entity (no se pudo encontrar la entidad)
-    - object (instancia no encontrada en lectura)
-    - input (instancia no encontrada en crear)
-    - subject (instancia no encontrada en la actualizaci√≥n)
-    - 1pk (clave principal no encontrada o compuesta)
-
-## Pruebas
-
-Estoy probando principalmente en Ubuntu y tengo las siguientes configuraciones de prueba:
-
-  - Ubuntu 12.04 Server with PHP 5.3 and MySQL 5.5 and PostgreSQL 9.1
-  - Ubuntu 14.04 Server with PHP 5.5 and MySQL 5.5 and PostgreSQL 9.3
-  - Ubuntu 16.04 Server with PHP 7.0 and MySQL 5.7 / MariaDB 10.0 and PostgreSQL 9.5
-  - Debian 7 Server with PHP 5.4 and MySQL 5.5 and PostgreSQL 9.1
-  - Debian 8 Server with PHP 5.6 and MySQL 5.5 / MariaDB 10.0 and PostgreSQL 9.4
-  - Debian 9 Server with PHP 7.0 and MySQL 5.5 / MariaDB 10.1 and PostgreSQL 9.6
-  - CentOS 7 Server with PHP 5.4 and MariaDB 5.5 and PostgreSQL 9.2
-  - Windows 2012 R2 with PHP 5.6 and SQL Server 2012
-  - Windows 2008 R2 with PHP 5.6 and SQL Server 2008
-
-Esto deber√≠a cubrir la mayor√≠a de los entornos, pero por favor notif√≠queme de las pruebas fallidas e informe su entorno.
-Tratar√© de cubrir la mayor parte de la configuraci√≥n anterior en la carpeta "docker" del proyecto.
-
-### Travis CI
-
-Desafortunadamente, no todas las pruebas est√°n automatizadas. ¬°Las contribuciones en esta √°rea son muy bienvenidas!
-
-### MySQL, PostgreSQL, y SQLite en Linux
-
-Las pruebas se guardan en el archivo `Tests.php`, pero primero debe copiar el archivo` Config.php.dist` en `Config.php` y agregar sus credenciales de base de datos. Puede agregar credenciales para una o todas las bases de datos admitidas.
-
-Despu√©s de configurar las conexiones de la base de datos, use PHPUnit para ejecutar todas las pruebas:
-
-```
-$ wget https://phar.phpunit.de/phpunit.phar
-$ php phpunit.phar
-
-Time: 11.16 seconds, Memory: 12.00MB
-
-OK, but incomplete, skipped, or risky tests!
-Tests: 6004, Assertions: 338, Skipped: 76.
-$
-```
-
-You can also run tests for only one database at a time if you'd like. For example to run MySQL tests, specify the `MysqlTest.php` file:
-
-```
-$ php phpunit.phar tests/MysqlTest.php
-
-Time: 3.54 seconds, Memory: 10.00MB
-
-OK (76 tests, 113 assertions)
-$
-```
-
-***Nota***: DEBE usar una base de datos vac√≠a cuando se cargue un accesorio de base de datos destructivo.
-
-### Servidor SQL en Windows:
-
-```
-C:\api-rest-php>c:\PHP\php.exe phpunit.phar tests\SqlServerTest.php
-C:\api-rest-php>
-```
-
-NB: DEBE usar una base de datos vac√≠a como accesorio de base de datos destructiva (se carga 'blog sqlserver.sql').
-
-## Instalaci√≥n de MySQL en Ubuntu Linux
-
-### Ubuntu 12.04
-
-```
-apt-get -y remove mysql-server
-apt-get -y autoremove
-apt-get -y install software-properties-common
-add-apt-repository -y ppa:ondrej/mysql-5.6
-apt-get update
-apt-get -y install mysql-server
-```
-
-## Instalaci√≥n de PostGIS en Ubuntu Linux
-
-### Ubuntu 12.04
-
-Instale PostGIS en Ubuntu Linux con los siguientes comandos:
-
-```
-sudo apt-get install python-software-properties
-sudo apt-add-repository ppa:ubuntugis/ppa
-sudo apt-get update
-sudo apt-get install postgresql-9.1-postgis-2.0
-```
-
-### Ubuntu 14.04
-
-Instale PostGIS en Ubuntu Linux con el siguiente comando:
-
-```
-sudo apt-get install postgresql-9.3-postgis-2.1
-```
-
-### Ubuntu 16.04
-
-Instale PostGIS en Ubuntu Linux con el siguiente comando:
-
-```
-sudo apt-get install postgresql-9.5-postgis-2.2
-```
-
-### Para todas las distribuciones
-
-Ahora habilite la extensi√≥n PostGIS para su base de datos:
-
-```
-sudo -u postgres psql phpcrudapi -c "CREATE EXTENSION postgis;"
-```
-
-En la cadena de arriba "phpcrudapi" es el nombre de su base de datos.
-
-## Ejemplo de configuraci√≥n de Nginx
-```
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.php index.html index.htm index.nginx-debian.html;
-    server_name server_domain_or_IP;
-
-    location / {
-        try_files $uri $uri/ =404;
+    {
+      "sub": "1234567890",
+      "name": "John Doe",
+      "admin": true,
+      "iat": "1538207605",
+      "exp": 1538207635
     }
 
-    location ~ [^/]\.php(/|$) {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        try_files $fastcgi_script_name =404;
-        set $path_info $fastcgi_path_info;
-        fastcgi_param PATH_INFO $path_info;
-        fastcgi_index index.php;
-        include fastcgi.conf;
-        fastcgi_pass unix:/run/php/php7.0-fpm.sock;
-    }
-
-    location ~ /\.ht {
-        deny all;
-    }
-}
-```
-
-## Pretty URL
-
-Puede "reescribir" la URL para eliminar el "api.php" de la URL.
-
-### Apache
-
-Habilite mod_rewrite y agregue lo siguiente a su archivo ".htaccess":
-
-```
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ api.php/$1 [L,QSA]
-```
-
-El archivo ".htaccess" debe ir en la misma carpeta que "api.php".
-
-### Nginx
-
-Para Nginx es posible que desee agregar algo como esto:
-
-```
-location /api {
-    rewrite ^/api(.*)$ /api.php$1 last;
-}
-```
-
-Esto debe agregarse a su configuraci√≥n de Nginx, antes o despu√©s de la secci√≥n `ubicaci√≥n ~ [^ /] \. Php (/ | $)`.
-
-## Depuraci√≥n
-
-Si tiene problemas para hacer que el archivo funcione, es posible que desee verificar las dos variables de entorno utilizadas. Descomente la siguiente l√≠nea:
-
-```
-var_dump($_SERVER['REQUEST_METHOD'],$_SERVER['PATH_INFO']); die();
-```
-
-Y luego visita:
-
-```
-http://localhost/api.php/posts
-```
-
-Esto deber√≠a dar como resultado:
-
-```
-string(3) "GET"
-string(6) "/posts"
-```
-
-Si no es as√≠, algo est√° mal en su servidor.
-
-## Instalaci√≥n del compositor
-
-Puede usar [Composer] (https://getcomposer.org/) para instalar. Incluya la biblioteca en su archivo composer.json:
-
-```json
-{
-    "require": {
-        "feliphegomez/api-rest-php": "origin"
-    }
-}
-```
-
-Ejecute `composer install` y luego use la biblioteca en su propio c√≥digo de esta manera:
-
-```php
-<?php
-
-include './vendor/autoload.php';
-
-// DB Connection
-$api = new PHP_CRUD_API(array(
- 	'dbengine'=>'MySQL',
- 	'hostname'=>'{DB-HOSTNAME-OR-IP}',
- 	'username'=>'{DB-USER}',
- 	'password'=>'{DB-PASSWORD}',
-	'database'=>'{DB-NAME}',
-	'charset'=>'utf8'
-));
-$api->executeCommand();
-
-```
-
-## Licencia
-
-GNU General Public License
-https://www.gnu.org/licenses/gpl.html
-
-M√°s informaci√≥n en feliphegomez@gmail.com.
+NB: la implementaciÛn de JWT solo admite los algoritmos basados ??en hash HS256, HS384 y HS512.
