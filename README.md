@@ -2,24 +2,24 @@
 
 Script PHP 7 de un solo archivo que agrega una API REST a una base de datos InnoDB MySQL 5.6. PostgreSQL 9.1 y MS SQL Server 2012 son totalmente compatibles.
 
-NB: Esta es la implementaciÛn de referencia de [TreeQL](https://treeql.org) en PHP.
+NB: Esta es la implementaci√≥n de referencia de [TreeQL](https://treeql.org) en PHP.
 
-NB: øEst·s buscando v1? Est· aquÌ: https://github.com/Feliphegomez/api-rest-php/tree/v1.0.0
+NB: ¬øEst√°s buscando v1? Est√° aqu√≠: https://github.com/Feliphegomez/api-rest-php/tree/v1.0.0
 
 ## Requerimientos
 
   - PHP 7.0 o superior con controladores PDO para MySQL, PgSQL o SqlSrv habilitados
-  - MySQL 5.6 / MariaDB 10.0 o superior para caracterÌsticas espaciales en MySQL
-  - PostGIS 2.0 o superior para caracterÌsticas espaciales en PostgreSQL 9.1 o superior
+  - MySQL 5.6 / MariaDB 10.0 o superior para caracter√≠sticas espaciales en MySQL
+  - PostGIS 2.0 o superior para caracter√≠sticas espaciales en PostgreSQL 9.1 o superior
   - SQL Server 2012 o superior (2017 para soporte de Linux)
 
 ##  Problemas conocidos
 
-- øVer los enteros como cadenas de texto? Aseg˙rese de habilitar la extensiÛn nd_pdo_mysql y deshabilite pdo_mysql .
+- ¬øVer los enteros como cadenas de texto? Aseg√∫rese de habilitar la extensi√≥n nd_pdo_mysql y deshabilite pdo_mysql .
 
-## InstalaciÛn
+## Instalaci√≥n
 
-Esta es una aplicaciÛn de un solo archivo! Cargue "`api.php`" en alg˙n lugar y disfrute!
+Esta es una aplicaci√≥n de un solo archivo! Cargue "`api.php`" en alg√∫n lugar y disfrute!
 
 Para el desarrollo local, puede ejecutar el servidor web incorporado de PHP:
 
@@ -30,11 +30,11 @@ Pruebe el script abriendo la siguiente URL:
     http://localhost:8080/api/api.php/records/posts/1
     http://localhost:8080/api/posts/1 (si se incluye el archivo .htaccess)
 
-No olvide modificar la configuraciÛn en la parte inferior del archivo.
+No olvide modificar la configuraci√≥n en la parte inferior del archivo.
 
-## ConfiguraciÛn
+## Configuraci√≥n
 
-Edite las siguientes lÌneas en la parte inferior del archivo "`api.php`":
+Edite las siguientes l√≠neas en la parte inferior del archivo "`api.php`":
 
     $config = new Config([
         'username' => 'xxx',
@@ -42,25 +42,25 @@ Edite las siguientes lÌneas en la parte inferior del archivo "`api.php`":
         'database' => 'xxx',
     ]);
 
-Estas son todas las opciones de configuraciÛn y su valor predeterminado entre parÈntesis:
+Estas son todas las opciones de configuraci√≥n y su valor predeterminado entre par√©ntesis:
 
 "driver": mysql , pgsql o sqlsrv ( mysql )
 "address": Nombre de host del servidor de base de datos ( localhost )
 "port": puerto TCP del servidor de la base de datos (predeterminado en el controlador predeterminado)
 "username": nombre de usuario del usuario que se conecta a la base de datos (no predeterminado)
-"password": contraseÒa del usuario que se conecta a la base de datos (no predeterminada)
-"database": Base de datos a la que se realiza la conexiÛn (no predeterminada)
+"password": contrase√±a del usuario que se conecta a la base de datos (no predeterminada)
+"database": Base de datos a la que se realiza la conexi√≥n (no predeterminada)
 "middlewares": Lista de middlewares para cargar ( cors )
 "controllers": lista de controladores para cargar ( records,openapi )
-"openApiBase": informaciÛn de OpenAPI ( {"info":{"title":"PHP-CRUD-API","version":"1.0.0"}} )
+"openApiBase": informaci√≥n de OpenAPI ( {"info":{"title":"PHP-CRUD-API","version":"1.0.0"}} )
 "cacheType": TempFile , Redis , Memcache , Memcached o NoCache ( TempFile )
-"cachePath": ruta / direcciÛn del cachÈ (por defecto al directorio temporal del sistema)
-"cacheTime": n˙mero de segundos que la memoria cachÈ es v·lida ( 10 )
+"cachePath": ruta / direcci√≥n del cach√© (por defecto al directorio temporal del sistema)
+"cacheTime": n√∫mero de segundos que la memoria cach√© es v√°lida ( 10 )
 "debug": muestra los errores en el encabezado "X-Debug-Info" ( false )
 
 ## Compilacion
 
-El cÛdigo reside en el directorio "`src`". Puedes acceder a ella en la URL:
+El c√≥digo reside en el directorio "`src`". Puedes acceder a ella en la URL:
 
     http://localhost:8080/api/src/records/posts/1
 
@@ -68,13 +68,13 @@ Puede compilar todos los archivos en un solo archivo "`api.php`" usando:
 
     php build.php
 
-NB: La secuencia de comandos agrega las clases en orden alfabÈtico (directorios primero).
+NB: La secuencia de comandos agrega las clases en orden alfab√©tico (directorios primero).
 
 ## Limitaciones
 
-Estas limitaciones tambiÈn estaban presentes en v1:
+Estas limitaciones tambi√©n estaban presentes en v1:
 
-  - Las claves primarias deben ser de incremento autom·tico (de 1 a 2 ^ 53) o UUID
+  - Las claves primarias deben ser de incremento autom√°tico (de 1 a 2 ^ 53) o UUID
   - Las claves primarias o externas compuestas no son compatibles
   - No se admiten escrituras complejas (transacciones)
   - Las consultas complejas que llaman a funciones (como "concat" o "suma") no son compatibles
@@ -82,110 +82,110 @@ Estas limitaciones tambiÈn estaban presentes en v1:
 
 ## Caracteristicas
 
-Estas caracterÌsticas coinciden con las caracterÌsticas en v1 (ver rama "v1"):
+Estas caracter√≠sticas coinciden con las caracter√≠sticas en v1 (ver rama "v1"):
 
-  - [x] Un solo archivo PHP, f·cil de implementar.
-  - [x] Muy poco cÛdigo, f·cil de adaptar y mantener.
-  - [ ] ~~TransmisiÛn de datos, bajo consumo de memoria.~~
+  - [x] Un solo archivo PHP, f√°cil de implementar.
+  - [x] Muy poco c√≥digo, f√°cil de adaptar y mantener.
+  - [ ] ~~Transmisi√≥n de datos, bajo consumo de memoria.~~
   - [x] Admite variables POST como entrada (x-www-form-urlencoded)
   - [x] Admite un objeto JSON como entrada
-  - [x]  Admite una matriz JSON como entrada (inserciÛn por lotes)
+  - [x]  Admite una matriz JSON como entrada (inserci√≥n por lotes)
   - [ ] ~~Admite la carga de archivos desde formularios web (multipart / form-data)~~
   - [ ] ~~Salida JSON condensada: la primera fila contiene nombres de campo~~
   - [x] Desinfectar y validar la entrada utilizando devoluciones de llamada
   - [x] Sistema de permisos para bases de datos, tablas, columnas y registros.
-  - [x] Los diseÒos de bases de datos multiusuario son compatibles
+  - [x] Los dise√±os de bases de datos multiusuario son compatibles
   - [x] Soporte CORS multi-dominio para peticiones de dominio cruzado
   - [x] Soporte para la lectura de resultados combinados de varias tablas.
-  - [x] Soporte de b˙squeda en m˙ltiples criterios
-  - [x] PaginaciÛn, b˙squeda, clasificaciÛn y selecciÛn de columnas.
-  - [x] DetecciÛn de relaciones con resultados anidados (belongsTo, hasMany y HABTM)
-  - [ ] ~~RelaciÛn "transforma" (de JSON condensado) para PHP y JavaScript~~
-  - [x] Soporte de incremento atÛmico mediante PATCH (para contadores)
-  - [x] Campos binarios soportados con codificaciÛn base64
+  - [x] Soporte de b√∫squeda en m√∫ltiples criterios
+  - [x] Paginaci√≥n, b√∫squeda, clasificaci√≥n y selecci√≥n de columnas.
+  - [x] Detecci√≥n de relaciones con resultados anidados (belongsTo, hasMany y HABTM)
+  - [ ] ~~Relaci√≥n "transforma" (de JSON condensado) para PHP y JavaScript~~
+  - [x] Soporte de incremento at√≥mico mediante PATCH (para contadores)
+  - [x] Campos binarios soportados con codificaci√≥n base64
   - [x] Campos y filtros espaciales / SIG compatibles con WKT
-  - [ ] ~~Soporte de datos no estructurados a travÈs de JSON / JSONB~~
-  - [x] Generar documentaciÛn de API utilizando herramientas OpenAPI
-  - [x] AutenticaciÛn a travÈs de token JWT o nombre de usuario / contraseÒa
+  - [ ] ~~Soporte de datos no estructurados a trav√©s de JSON / JSONB~~
+  - [x] Generar documentaci√≥n de API utilizando herramientas OpenAPI
+  - [x] Autenticaci√≥n a trav√©s de token JWT o nombre de usuario / contrase√±a
   - [ ] ~~Soporte de SQLite~~
 
- NB: Sin marca significa: a˙n no implementado. Striken significa: no ser· implementado.
+ NB: Sin marca significa: a√∫n no implementado. Striken significa: no ser√° implementado.
 
-### CaracterÌsticas adicionales
+### Caracter√≠sticas adicionales
 
-Estas caracterÌsticas son nuevas y no se incluyeron en v1.
+Estas caracter√≠sticas son nuevas y no se incluyeron en v1.
 
   - No refleja en cada solicitud (mejor rendimiento)
   - Los filtros complejos (con "y" y "o") son compatibles
   - Soporte para salida de estructura de base de datos en JSON
   - Soporte para datos booleanos y binarios en todos los motores de bases de datos
-  - Soporte para datos relacionales en lectura (no solo en operaciÛn de lista)
-  - Soporte para middleware para modificar todas las operaciones (tambiÈn lista)
+  - Soporte para datos relacionales en lectura (no solo en operaci√≥n de lista)
+  - Soporte para middleware para modificar todas las operaciones (tambi√©n lista)
   - Informe de errores en JSON con el estado HTTP correspondiente
-  - Soporte para autenticaciÛn b·sica y vÌa proveedor de autenticaciÛn (JWT)
-  - Soporte para funcionalidad b·sica de firewall.
+  - Soporte para autenticaci√≥n b√°sica y v√≠a proveedor de autenticaci√≥n (JWT)
+  - Soporte para funcionalidad b√°sica de firewall.
 
 ## Middleware
 
-Puede habilitar el siguiente middleware utilizando el par·metro de configuraciÛn "middlewares":
+Puede habilitar el siguiente middleware utilizando el par√°metro de configuraci√≥n "middlewares":
 
-- "firewall": limita el acceso a direcciones IP especÌficas
+- "firewall": limita el acceso a direcciones IP espec√≠ficas
 - "cors": soporte para solicitudes CORS (habilitado por defecto)
-- "xsrf": Bloquee los ataques XSRF usando el mÈtodo 'Double Submit Cookie'
+- "xsrf": Bloquee los ataques XSRF usando el m√©todo 'Double Submit Cookie'
 - "ajaxOnly": restringe las solicitudes que no sean AJAX para evitar ataques XSRF
-- "jwtAuth": soporte para "autenticaciÛn JWT"
-- "basicAuth": Soporte para "AutenticaciÛn b·sica"
+- "jwtAuth": soporte para "autenticaci√≥n JWT"
+- "basicAuth": Soporte para "Autenticaci√≥n b√°sica"
 - "authorization": restringe el acceso a ciertas tablas o columnas
-- "validation": devuelve errores de validaciÛn de entrada para reglas personalizadas
+- "validation": devuelve errores de validaci√≥n de entrada para reglas personalizadas
 - "sanitation": aplicar saneamiento de entrada en crear y actualizar
-- "multiTenancy": restringe el acceso de los inquilinos en un escenario con m˙ltiples inquilinos
-- "customization": proporciona controladores para la personalizaciÛn de solicitudes y respuestas
+- "multiTenancy": restringe el acceso de los inquilinos en un escenario con m√∫ltiples inquilinos
+- "customization": proporciona controladores para la personalizaci√≥n de solicitudes y respuestas
 
-El par·metro de configuraciÛn "middlewares" es una lista separada por comas de middlewares habilitados. Puede ajustar el comportamiento del middleware utilizando par·metros de configuraciÛn especÌficos del middleware:
+El par√°metro de configuraci√≥n "middlewares" es una lista separada por comas de middlewares habilitados. Puede ajustar el comportamiento del middleware utilizando par√°metros de configuraci√≥n espec√≠ficos del middleware:
 
 - "firewall.reverseProxy": se establece en "true" cuando se utiliza un proxy inverso ("")
 - "firewall.allowedIpAddresses": lista de direcciones IP que pueden conectarse ("")
-- "cors.allowedOrigins": los orÌgenes permitidos en los encabezados CORS ("*")
+- "cors.allowedOrigins": los or√≠genes permitidos en los encabezados CORS ("*")
 - "cors.allowHeaders": los encabezados permitidos en la solicitud CORS ("Content-Type, X-XSRF-TOKEN")
-- "cors.allowMethods": los mÈtodos permitidos en la solicitud CORS ("OPTIONS, GET, PUT, POST, DELETE, PATCH")
+- "cors.allowMethods": los m√©todos permitidos en la solicitud CORS ("OPTIONS, GET, PUT, POST, DELETE, PATCH")
 - "cors.allowCredentials": para permitir credenciales en la solicitud CORS ("true")
 - "cors.exposeHeaders": encabezados de lista blanca a los que los navegadores pueden acceder ("")
-- "cors.maxAge": el tiempo que la concesiÛn de CORS es v·lida en segundos ("1728000")
-- "xsrf.excludeMethods": los mÈtodos que no requieren la protecciÛn XSRF ("OPTIONS, GET")
-- "xsrf.cookieName": el nombre de la cookie de protecciÛn XSRF ("XSRF-TOKEN")
-- "xsrf.headerName": el nombre del encabezado de protecciÛn XSRF ("X-XSRF-TOKEN")
-- "ajaxOnly.excludeMethods": los mÈtodos que no requieren AJAX ("OPTIONS, GET")
+- "cors.maxAge": el tiempo que la concesi√≥n de CORS es v√°lida en segundos ("1728000")
+- "xsrf.excludeMethods": los m√©todos que no requieren la protecci√≥n XSRF ("OPTIONS, GET")
+- "xsrf.cookieName": el nombre de la cookie de protecci√≥n XSRF ("XSRF-TOKEN")
+- "xsrf.headerName": el nombre del encabezado de protecci√≥n XSRF ("X-XSRF-TOKEN")
+- "ajaxOnly.excludeMethods": los m√©todos que no requieren AJAX ("OPTIONS, GET")
 - "ajaxOnly.headerName": el nombre del encabezado requerido ("X-Requested-With")
 - "ajaxOnly.headerValue": el valor del encabezado requerido ("XMLHttpRequest")
-- "jwtAuth.mode": config˙relo como "opcional" si desea permitir el acceso anÛnimo ("requerido")
-- "jwtAuth.header": nombre del encabezado que contiene el token JWT ("X-AutorizaciÛn")
-- "jwtAuth.leeway": el n˙mero aceptable de segundos de inclinaciÛn del reloj ("5")
-- "jwtAuth.ttl": el n˙mero de segundos que el token es v·lido ("30")
+- "jwtAuth.mode": config√∫relo como "opcional" si desea permitir el acceso an√≥nimo ("requerido")
+- "jwtAuth.header": nombre del encabezado que contiene el token JWT ("X-Autorizaci√≥n")
+- "jwtAuth.leeway": el n√∫mero aceptable de segundos de inclinaci√≥n del reloj ("5")
+- "jwtAuth.ttl": el n√∫mero de segundos que el token es v√°lido ("30")
 - "jwtAuth.secret": el secreto compartido utilizado para firmar el token JWT con ("")
-- "jwtAuth.algorithms": los algoritmos permitidos, vacÌo significa 'todos' ("")
-- "jwtAuth.audiences": las audiencias permitidas, vacÌo significa "todos" ("")
-- "jwtAuth.issuers": los emisores que est·n permitidos, vacÌo significa 'todos' ("")
-- "basicAuth.mode": config˙relo como "opcional" si desea permitir el acceso anÛnimo ("requerido")
-- "basicAuth.realm": texto que se le solicitar· al mostrar el inicio de sesiÛn ("Se requieren nombre de usuario y contraseÒa")
-- "basicAuth.passwordFile": el archivo a leer para las combinaciones de nombre de usuario / contraseÒa (".htpasswd")
-- "permission.tableHandler": controlador para implementar las reglas de autorizaciÛn de tablas ("")
-- "permission.columnHandler": controlador para implementar las reglas de autorizaciÛn de columna ("")
-- "permission.recordHandler": controlador para implementar reglas de filtro de autorizaciÛn de registros ("")
-- "validation.handler": controlador para implementar reglas de validaciÛn para valores de entrada ("")
+- "jwtAuth.algorithms": los algoritmos permitidos, vac√≠o significa 'todos' ("")
+- "jwtAuth.audiences": las audiencias permitidas, vac√≠o significa "todos" ("")
+- "jwtAuth.issuers": los emisores que est√°n permitidos, vac√≠o significa 'todos' ("")
+- "basicAuth.mode": config√∫relo como "opcional" si desea permitir el acceso an√≥nimo ("requerido")
+- "basicAuth.realm": texto que se le solicitar√° al mostrar el inicio de sesi√≥n ("Se requieren nombre de usuario y contrase√±a")
+- "basicAuth.passwordFile": el archivo a leer para las combinaciones de nombre de usuario / contrase√±a (".htpasswd")
+- "permission.tableHandler": controlador para implementar las reglas de autorizaci√≥n de tablas ("")
+- "permission.columnHandler": controlador para implementar las reglas de autorizaci√≥n de columna ("")
+- "permission.recordHandler": controlador para implementar reglas de filtro de autorizaci√≥n de registros ("")
+- "validation.handler": controlador para implementar reglas de validaci√≥n para valores de entrada ("")
 - "sanitation.handler": controlador para implementar reglas de saneamiento para valores de entrada ("")
-- "multiTenancy.handler": controlador para implementar reglas simples de tenencia m˙ltiple ("")
-- "customization.beforeHandler": Controlador para implementar la personalizaciÛn de la solicitud ("")
-- "customization.afterHandler": controlador para implementar la personalizaciÛn de la respuesta ("")
+- "multiTenancy.handler": controlador para implementar reglas simples de tenencia m√∫ltiple ("")
+- "customization.beforeHandler": Controlador para implementar la personalizaci√≥n de la solicitud ("")
+- "customization.afterHandler": controlador para implementar la personalizaci√≥n de la respuesta ("")
 
-Si no especifica estos par·metros en la configuraciÛn, se utilizan los valores predeterminados (entre parÈntesis).
+Si no especifica estos par√°metros en la configuraci√≥n, se utilizan los valores predeterminados (entre par√©ntesis).
 
-##  TreeQL, un GraphQL pragm·tico
+## TreeQL, un GraphQL pragm√°tico
 
-TreeQL le permite crear un "·rbol" de objetos JSON en funciÛn de la estructura (relaciones) de la base de datos SQL y su consulta.
+[TreeQL](https://treeql.org) permite crear un "√°rbol" de objetos JSON en funci√≥n de la estructura de la base de datos SQL (relaciones) y su consulta.
 
-Se basa libremente en el est·ndar REST y tambiÈn est· inspirado en json: api.
+Se basa libremente en el est√°ndar REST y tambi√©n est√° inspirado en json: api.
 
-### CRUD + Lista
+### Lista + CRUD
 
 La tabla de publicaciones de ejemplo tiene solo unos pocos campos:
 
@@ -196,7 +196,7 @@ La tabla de publicaciones de ejemplo tiene solo unos pocos campos:
     content
     created
 
-Las siguientes operaciones de la lista CRUD + act˙an en esta tabla.
+Las siguientes operaciones de la lista CRUD + act√∫an en esta tabla.
 
 #### Crear
 
@@ -212,7 +212,7 @@ Tienes que enviar un cuerpo que contiene:
         "created": "2018-03-06T21:34:01Z"
     }
 
-Y devolver· el valor de la clave principal del registro reciÈn creado:
+Y devolver√° el valor de la clave principal del registro reci√©n creado:
 
     2
 
@@ -222,7 +222,7 @@ Para leer un registro de esta tabla, la solicitud se puede escribir en formato d
 
     GET /records/posts/1
 
-Donde "1" es el valor de la clave principal del registro que desea leer. Volver·
+Donde "1" es el valor de la clave principal del registro que desea leer. Volver√°
 
     {
         "id": 1
@@ -233,7 +233,7 @@ Donde "1" es el valor de la clave principal del registro que desea leer. Volver·
 
 En las operaciones de lectura puede aplicar uniones.
 
-#### Actualizar
+#### actualizar
 
 Para actualizar un registro en esta tabla, la solicitud se puede escribir en formato de URL como:
 
@@ -245,7 +245,7 @@ Donde "1" es el valor de la clave principal del registro que desea actualizar. E
         "title": "Adjusted title!"
     }
 
-Esto ajusta el tÌtulo del post. Y el valor de retorno es el n˙mero de filas que se establecen:
+Esto ajusta el t√≠tulo del post. Y el valor de retorno es el n√∫mero de filas que se establecen:
 
     1
 
@@ -255,7 +255,7 @@ Si desea eliminar un registro de esta tabla, la solicitud se puede escribir en f
 
     DELETE /records/posts/1
 
-Y devolver· el n˙mero de filas eliminadas:
+Y devolver√° el n√∫mero de filas eliminadas:
 
     1
 
@@ -265,7 +265,7 @@ Para listar los registros de esta tabla, la solicitud se puede escribir en forma
 
     GET /records/posts
 
-Volver·
+It will return:
 
     {
         "records":[
@@ -282,21 +282,21 @@ En las operaciones de lista puede aplicar filtros y uniones.
 
 ### Filtros
 
-Los filtros proporcionan la funcionalidad de b˙squeda, en las llamadas de lista, utilizando el par·metro "filtro". Debe especificar el nombre de la columna, una coma, el tipo de coincidencia, otra coma y el valor que desea filtrar. Estos son tipos de concordancia soportados:
+Los filtros proporcionan la funcionalidad de b√∫squeda, en la lista de llamadas, usando el par√°metro "filtro". Debe especificar el nombre de la columna, una coma, el tipo de coincidencia, otra coma y el valor que desea filtrar. Estos son tipos de concordancia soportados:
 
   - "cs": contiene cadena (cadena contiene valor)
   - "sw": comienza con (la cadena comienza con el valor)
   - "ew": termina con (final de cadena con valor)
-  - "eq": igual (la cadena o el n˙mero coinciden exactamente)
-  - "lt": menor que (el n˙mero es menor que el valor)
-  - "le": menor o igual (el n˙mero es menor o igual al valor)
-  - "ge": mayor o igual (el n˙mero es mayor o igual que el valor)
-  - "gt": mayor que (el n˙mero es mayor que el valor)
-  - "bt": entre (el n˙mero est· entre dos valores separados por comas)
-  - "in": in (el n˙mero o la cadena est· en una lista de valores separados por comas)
+  - "eq": igual (la cadena o el n√∫mero coinciden exactamente)
+  - "lt": menor que (el n√∫mero es menor que el valor)
+  - "le": menor o igual (el n√∫mero es menor o igual al valor)
+  - "ge": mayor o igual (el n√∫mero es mayor o igual que el valor)
+  - "gt": mayor que (el n√∫mero es mayor que el valor)
+  - "bt": entre (el n√∫mero est√° entre dos valores separados por comas)
+  - "in": in (el n√∫mero o la cadena est√° en una lista de valores separados por comas)
   - "is": es nulo (el campo contiene el valor "NULL")
 
-Puede negar todos los filtros al anteponer un car·cter "n", de modo que "eq" se convierta en "neq". Ejemplos de uso del filtro son:
+Puede negar todos los filtros al anteponer un car√°cter "n", de modo que "eq" se convierta en "neq". Ejemplos de uso del filtro son:
 
     GET /records/categories?filter=name,eq,Internet
     GET /records/categories?filter=name,sw,Inter
@@ -315,25 +315,28 @@ Salida:
         ]
     }
 
-En la siguiente secciÛn profundizaremos en cÛmo puede aplicar varios filtros en una sola llamada de lista.
+En la siguiente secci√≥n profundizaremos en c√≥mo puede aplicar varios filtros en una sola llamada de lista.
 
-### Filtros m˙ltiples
+### Filtros m√∫ltiples
 
-Los filtros pueden aplicarse aplicando el par·metro "filtro" en la URL. Por ejemplo la siguiente URL:
+Los filtros pueden aplicarse aplicando el par√°metro "filtro" en la URL. Por ejemplo la siguiente URL: 
 
     GET /records/categories?filter=id,gt,1&filter=id,lt,3
 
-solicitar· todas las categorÌas "donde id> 1 e id <3". Si quieres "where id = 2 o id = 4" debes escribir:
+solicitar√° todas las categor√≠as "donde id> 1 e id <3". Si desea "where id = 2 o id = 4" debe escribir:
 
     GET /records/categories?filter1=id,eq,2&filter2=id,eq,4
     
-Como ve, agregamos un n˙mero al par·metro "filtro" para indicar que se debe aplicar "OR" en lugar de "AND". Tenga en cuenta que tambiÈn puede repetir "filter1" y crear un "AND" dentro de un "OR". Ya que tambiÈn puede ir un nivel m·s profundo agregando una letra (af) puede crear casi cualquier ·rbol de condiciÛn razonablemente complejo.
+Como ve, agregamos un n√∫mero al par√°metro "filtro" para indicar que se debe aplicar "OR" en lugar de "AND".
+Tenga en cuenta que tambi√©n puede repetir "filter1" y crear un "AND" dentro de un "OR". Dado que tambi√©n puede ir un nivel m√°s profundo al agregar una letra (af), puede crear casi cualquier √°rbol de condiciones razonablemente complejo.
 
-NB: solo puede filtrar en la tabla solicitada (no incluida en ella) y los filtros solo se aplican en la lista de llamadas.
+NOTA: solo puede filtrar en la tabla solicitada (no incluida en ella) y los filtros solo se aplican en la lista de llamadas.
 
-### SelecciÛn de columna
+### Seleccion de columna
 
-Por defecto, todas las columnas est·n seleccionadas. Con el par·metro "incluir" puede seleccionar columnas especÌficas. Puede usar un punto para separar el nombre de la tabla del nombre de la columna. Las columnas m˙ltiples deben estar separadas por comas. Se puede utilizar un asterisco ("*") como comodÌn para indicar "todas las columnas". Similar a "incluir" puede usar el par·metro "excluir" para eliminar ciertas columnas:
+Por defecto, todas las columnas est√°n seleccionadas.
+Con el par√°metro "incluir" puede seleccionar columnas espec√≠ficas.
+Puede usar un punto para separar el nombre de la tabla del nombre de la columna. Las columnas m√∫ltiples deben estar separadas por comas. Se puede utilizar un asterisco ("*") como comod√≠n para indicar "todas las columnas". Similar a "incluir" puede usar el par√°metro "excluir" para eliminar ciertas columnas:
 
 ```
 GET /records/categories/1?include=name
@@ -349,11 +352,11 @@ Salida:
     }
 ```
 
-NB: las columnas que se utilizan para incluir entidades relacionadas se agregan autom·ticamente y no se pueden dejar fuera de la salida.
+NOTA: las columnas que se utilizan para incluir entidades relacionadas se agregan autom√°ticamente y no se pueden dejar fuera de la salida.
 
 ### Ordenando
 
-Con el par·metro "orden" se puede ordenar. Por defecto, la clasificaciÛn est· en orden ascendente, pero al especificar "desc" esto se puede revertir:
+Con el par√°metro "orden" se puede ordenar. Por defecto, la clasificaci√≥n est√° en orden ascendente, pero al especificar "desc" esto se puede revertir:
 
 ```
 GET /records/categories?order=name,desc
@@ -377,11 +380,34 @@ Salida:
     }
 ```
 
-NB: Puede ordenar en m˙ltiples campos utilizando m˙ltiples par·metros de "orden". No se puede ordenar en columnas "unidas".
+NOTA: puede ordenar en m√∫ltiples campos utilizando m√∫ltiples par√°metros de "orden". No se puede ordenar en columnas "unidas".
 
-### PaginaciÛn
+### Tama√±o limite
 
-El par·metro "p·gina" contiene la p·gina solicitada. El tamaÒo de p·gina predeterminado es 20, pero se puede ajustar (por ejemplo, a 50):
+El par√°metro "tama√±o" limita el n√∫mero de registros devueltos. Esto se puede usar para las N listas principales junto con el par√°metro "orden" (usar orden descendente).
+
+```
+GET /records/categories?order=id,desc&size=1
+```
+
+Salida:
+
+```
+    {
+        "records":[
+            {
+                "id": 3
+                "name": "Web development"
+            }
+        ]
+    }
+```
+
+NOTA: si tambi√©n desea conocer el n√∫mero total de registros, puede utilizar el par√°metro "p√°gina".
+
+### Paginaci√≥n
+
+El par√°metro "p√°gina" contiene la p√°gina solicitada. El tama√±o de p√°gina predeterminado es 20, pero se puede ajustar (por ejemplo, a 50).
 
 ```
 GET /records/categories?order=id&page=1
@@ -406,9 +432,9 @@ Salida:
     }
 ```
 
-NB: las p·ginas que no est·n ordenadas no pueden paginarse.
+NOTA: como las p√°ginas que no est√°n ordenadas no pueden paginarse, las p√°ginas se ordenar√°n por clave principal.
 
-### Uniones / JOIN
+### Union de Tablas
 
 Digamos que usted tiene una tabla de publicaciones que tiene comentarios (realizados por los usuarios) y que las publicaciones pueden tener etiquetas.
 
@@ -419,20 +445,20 @@ Digamos que usted tiene una tabla de publicaciones que tiene comentarios (realiz
     content  user_id   phone     tag_id
     created  message
 
-Cuando desee enumerar las publicaciones con sus usuarios y etiquetas de comentarios, puede solicitar dos rutas de "·rbol":
+Cuando desee enumerar las publicaciones con sus usuarios y etiquetas de comentarios, puede solicitar dos rutas de "√°rbol":
 
     posts -> comments  -> users
     posts -> post_tags -> tags
 
-Estas rutas tienen la misma raÌz y esta solicitud se puede escribir en formato de URL como:
+Estas rutas tienen la misma ra√≠z y esta solicitud se puede escribir en formato de URL como:
 
     GET /records/posts?join=comments,users&join=tags
 
-AquÌ puede omitir la tabla intermedia que vincula las publicaciones a las etiquetas. En este ejemplo, ver· los tres tipos de relaciones de tabla (hasMany, belongsTo y hasAndBelongsToMany) en efecto:
+Aqu√≠ puede omitir la tabla intermedia que vincula las publicaciones a las etiquetas. En este ejemplo, ver√° los tres tipos de relaciones de tabla (hasMany, belongsTo y hasAndBelongsToMany) en efecto:
 
-- "post" has many "comments"
-- "comment" belongs to "user"
-- "post" has and belongs to many "tags"
+- "post" tiene muchos "comments"
+- "comment" pertenece a "user"
+- "post" tiene y pertenece a muchas "tags"
 
 Esto puede llevar a los siguientes datos JSON:
 
@@ -487,13 +513,12 @@ Esto puede llevar a los siguientes datos JSON:
         ]
     }
 
-Ver· que se detectan las relaciones "belongsTo" y el valor al que se hace referencia reemplaza el valor de la clave externa. En el caso de "hasMany" y "hasAndBelongsToMany", el nombre de la tabla se utiliza una nueva propiedad en el objeto.
-
-NB: debe crear una restricciÛn de clave externa para que la uniÛn funcione.
+Ver√° que se detectan las relaciones "belongsTo" y el valor al que se hace referencia reemplaza el valor de la clave externa.
+En el caso de "hasMany" y "hasAndBelongsToMany", el nombre de la tabla se utiliza una nueva propiedad en el objeto.
 
 ### Operaciones por lotes
 
-Cuando desee crear, leer, actualizar o eliminar, puede especificar varios valores de clave principal en la URL. TambiÈn debe enviar una matriz en lugar de un objeto en el cuerpo de la solicitud para crear y actualizar. 
+Cuando desee crear, leer, actualizar o eliminar, puede especificar varios valores de clave principal en la URL. Tambi√©n debe enviar una matriz en lugar de un objeto en el cuerpo de la solicitud para crear y actualizar.
 
 Para leer un registro de esta tabla, la solicitud se puede escribir en formato de URL como:
 
@@ -516,11 +541,11 @@ El resultado puede ser:
             }
     ]
 
-De forma similar, cuando desea realizar una actualizaciÛn por lotes, la solicitud en formato de URL se escribe como:
+De forma similar, cuando desea realizar una actualizaci√≥n por lotes, la solicitud en formato de URL se escribe como:
 
     PUT /records/posts/1,2
 
-Donde "1" y "2" son los valores de las claves primarias de los registros que desea actualizar. El cuerpo debe contener el mismo n˙mero de objetos, ya que hay claves primarias en la URL:
+Donde "1" y "2" son los valores de las claves primarias de los registros que desea actualizar. El cuerpo debe contener el mismo n√∫mero de objetos, ya que hay claves primarias en la URL:
 
     [   
         {
@@ -531,49 +556,117 @@ Donde "1" y "2" son los valores de las claves primarias de los registros que des
         }        
     ]
 
-This adjusts the titles of the posts. And the return values are the number of rows that are set:
+Esto ajusta los t√≠tulos de los mensajes. Y los valores de retorno son el n√∫mero de filas que se establecen:
 
     1,1
 
-Esto ajusta los tÌtulos de los mensajes. Y los valores de retorno son el n˙mero de filas que se establecen:
+Lo que significa que hab√≠a dos operaciones de actualizaci√≥n y cada una de ellas hab√≠a establecido una fila.
+Las operaciones por lotes utilizan transacciones de la base de datos, por lo que o bien todas tienen √©xito o todas fallan (las exitosas se devuelven).
 
-### Lo que significa que habÌa dos operaciones de actualizaciÛn y cada una de ellas habÌa establecido una fila. Las operaciones por lotes utilizan las transacciones de la base de datos, por lo que todas tienen Èxito o todas fallan (las exitosas se devuelven).
+### Soporte espacial
 
-Para el soporte espacial hay un conjunto adicional de filtros que se pueden aplicar en las columnas de geometrÌa y que comienzan con una "s":
+Para el soporte espacial hay un conjunto adicional de filtros que se pueden aplicar en columnas de geometr√≠a y que comienzan con una "s":
 
-- "sco": contiene espacial (la geometrÌa contiene otra)
-- "scr": cruces espaciales (la geometrÌa cruza otra)
-- "sdi": separaciÛn espacial (la geometrÌa es diferente de otra)
-- "seq": espacial igual (la geometrÌa es igual a otra)
-- "pecado": intersecciones espaciales (la geometrÌa se interseca con otra)
-- "sov": superposiciones espaciales (la geometrÌa se superpone a otra)
-- "sto": toques espaciales (la geometrÌa toca a otra)
-- "swi": espacial dentro (la geometrÌa est· dentro de otra)
-- "sic": el espacio est· cerrado (la geometrÌa es cerrada y simple)
-- "sis": espacial es simple (la geometrÌa es simple)
-- "siv": el espacio es v·lido (la geometrÌa es v·lida)
+  - "sco": contiene espacial (la geometr√≠a contiene otra)
+  - "scr": cruces espaciales (la geometr√≠a cruza otra)
+  - "sdi": separaci√≥n espacial (la geometr√≠a es diferente de otra)
+  - "seq": espacial igual (la geometr√≠a es igual a otra)
+  - "sin": intersecciones espaciales (la geometr√≠a se interseca con otra)
+  - "sov": superposiciones espaciales (la geometr√≠a se superpone a otra)
+  - "sto": toques espaciales (la geometr√≠a toca a otra)
+  - "swi": espacial dentro (la geometr√≠a est√° dentro de otra)
+  - "sic": el espacio est√° cerrado (la geometr√≠a es cerrada y simple)
+  - "sis": espacial es simple (la geometr√≠a es simple)
+  - "siv": el espacio es v√°lido (la geometr√≠a es v√°lida)
 
-Estos filtros se basan en los est·ndares OGC y tambiÈn lo es la especificaciÛn WKT en la que se representan las columnas de geometrÌa.
+Estos filtros se basan en los est√°ndares OGC y tambi√©n lo es la especificaci√≥n WKT en la que se representan las columnas de geometr√≠a.
 
-### AutenticaciÛn
+#### GeoJSON
 
-La autenticaciÛn se realiza mediante el envÌo de un encabezado de "AutorizaciÛn". Identifica al usuario y lo almacena en el $_SESSION super global. Esta variable se puede usar en los controladores de autorizaciÛn para decidir si o no sombeody deberÌa tener acceso de lectura o escritura a ciertas tablas, columnas o registros. Actualmente hay dos tipos de autenticaciÛn admitidos: "B·sico" y "JWT". Esta funcionalidad se habilita agregando el middleware 'basicAuth' y / o 'jwtAuth'.
+El soporte de GeoJSON es una vista de solo lectura en las tablas y registros en formato GeoJSON. Estas solicitudes son compatibles:
 
-#### utenticaciÛn b·sica
+    method path                  - operation - description
+    ----------------------------------------------------------------------------------------
+    GET    /geojson/{table}      - list      - lists records as a GeoJSON FeatureCollection
+    GET    /geojson/{table}/{id} - read      - reads a record by primary key as a GeoJSON Feature
 
-El tipo B·sico es compatible con un archivo que contiene a los usuarios y sus contraseÒas (con hash) separadas por dos puntos (':'). Cuando las contraseÒas se ingresan en texto sin formato, se llenan autom·ticamente. El nombre de usuario autenticado se almacenar· en la $_SESSION['username'] . Debe enviar un encabezado de "AutorizaciÛn" que contenga un nombre de usuario y una contraseÒa codificados en base64 url ??y separados por dos puntos despuÈs de la palabra "B·sico".
+El "`/geojson`" punto final utiliza el "`/records`" punto interno y hereda toda la funcionalidad, como las combinaciones y los filtros.
+Tambi√©n admite un par√°metro de "geometr√≠a" para indicar el nombre de la columna de geometr√≠a en caso de que la tabla tenga m√°s de una.
+Para las vistas de mapa, admite el par√°metro "bbox" en el que puede especificar las coordenadas superior izquierda y inferior derecha (separadas por comas).
+Los siguientes tipos de geometr√≠a son compatibles con la implementaci√≥n de GeoJSON:
+
+  - Point - Punto
+  - MultiPoint
+  - LineString
+  - MultiLineString
+  - Polygon - Pol√≠gono
+  - MultiPolygon
+
+La funcionalidad GeoJSON est√° habilitada de forma predeterminada, pero se puede deshabilitar usando la configuraci√≥n de "controladores".
+
+### Autenticaci√≥n
+
+Actualmente hay tres tipos de autenticaci√≥n soportados. Todos ellos almacenan el usuario autenticado en el `$_SESSION` s√∫per global.
+Esta variable se puede usar en los controladores de autorizaci√≥n para decidir si o no sombeody deber√≠a tener acceso de lectura o escritura a ciertas tablas, columnas o registros.
+La siguiente descripci√≥n general muestra los tipos de middleware de autenticaci√≥n que puede habilitar.
+
+| Nombre   | Middleware | Autenticado a trav√©s de    | Los usuarios se almacenan en | Variable de sesion      |
+| -------- | ---------- | -------------------------- | ---------------------------- | ----------------------- |
+| Database | dbAuth     | '/login' punto final       | 	tabla de base de datos      | `$_SESSION['user']`     |
+| Basic    | basicAuth  | 'Authorization' Encabezado | '.htpasswd' archivo          | `$_SESSION['username']` |
+| JWT      | jwtAuth    | 'Authorization' Encabezado | proveedor de identidad       | `$_SESSION['claims']`   |
+
+A continuaci√≥n encontrar√° m√°s informaci√≥n sobre cada uno de los tipos de autenticaci√≥n.
+
+#### Autenticaci√≥n de base de datos
+
+El middleware de autenticaci√≥n de base de datos define dos nuevas rutas:
+
+    method path       - parameters               - description
+    ----------------------------------------------------------------------------------------
+    POST   /login     - username + password      - logs a user in by username and password
+    POST   /logout    -                          - logs out the currently logged in user
+
+Un usuario puede iniciar sesi√≥n enviando su nombre de usuario y contrase√±a al punto final de inicio de sesi√≥n (en formato JSON).
+El usuario autenticado (con todas sus propiedades) se almacenar√° en la `$_SESSION['user']` variable.
+El usuario puede cerrar la sesi√≥n enviando una solicitud POST con un cuerpo vac√≠o al punto final de cierre de sesi√≥n.
+Las contrase√±as se almacenan como hashes en la columna de contrase√±a en la tabla de usuarios.
+Para generar el valor de hash para la contrase√±a 'pass2' puede ejecutar en la l√≠nea de comando:
+
+    php -r 'echo password_hash("pass2", PASSWORD_DEFAULT)."\n";'
+
+¬°Es IMPORTANTE restringir el acceso a la tabla de usuarios utilizando el middleware de "authorization", de lo contrario, todos los usuarios pueden agregar, modificar o eliminar libremente cualquier cuenta!
+La configuraci√≥n m√≠nima se muestra a continuaci√≥n:
+
+    'middlewares' => 'dbAuth,authorization',
+    'authorization.tableHandler' => function ($operation, $tableName) {
+        return $tableName != 'users';
+    },
+
+Tenga en cuenta que este middleware utiliza cookies de sesi√≥n y almacena el estado de inicio de sesi√≥n en el servidor.
+
+#### Autenticaci√≥n b√°sica
+
+El tipo B√°sico es compatible con un archivo (por defecto '.htpasswd') que contiene a los usuarios y sus contrase√±as (con hash) separadas por dos puntos (':').
+Cuando las contrase√±as se ingresan en texto sin formato, se llenan autom√°ticamente.
+El nombre de usuario autenticado se almacenar√° en la `$_SESSION['username']` variable.
+Debe enviar un encabezado de "Autorizaci√≥n" que contenga un nombre de usuario y una contrase√±a codificados en base64 url ‚Äã‚Äãy separados por dos puntos despu√©s de la palabra "Basic".
 
     Authorization: Basic dXNlcm5hbWUxOnBhc3N3b3JkMQ
 
-Este ejemplo envÌa la cadena "username1:password1".
+Este ejemplo env√≠a la cadena "username1: password1".
 
-#### AutenticaciÛn JWT
+#### Autenticaci√≥n JWT
 
-El tipo JWT requiere que otro servidor (SSO / Identity) firme un token que contiene notificaciones. Ambos servidores comparten un secreto para que puedan firmar o verificar que la firma es v·lida. Las reclamaciones se almacenan en la $_SESSION['claims'] . Debe enviar un encabezado de "AutorizaciÛn X" que contenga un encabezado, cuerpo y firma de token con codificaciÛn url base64, cuerpo y firma despuÈs de la palabra "Portador" ( lea m·s sobre JWT aquÌ ). El est·ndar dice que necesita usar el encabezado "AutorizaciÛn", pero esto es problem·tico en Apache y PHP.
+El tipo JWT requiere que otro servidor (SSO / Identity) firme un token que contiene notificaciones.
+Ambos servidores comparten un secreto para que puedan firmar o verificar que la firma es v√°lida.
+Las reclamaciones se almacenan en la variable `$_SESSION['claims']` .
+Debe enviar un encabezado "Autorizaci√≥n X" que contenga un encabezado, cuerpo y token de token con codificaci√≥n url base64, cuerpo y firma despu√©s de la palabra "Bearer" ([lea m√°s acerca de JWT aqu√≠](https://jwt.io/)).
+El est√°ndar dice que necesita usar el encabezado "Authorization", pero esto es problem√°tico en Apache y PHP.
 
     X-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6IjE1MzgyMDc2MDUiLCJleHAiOjE1MzgyMDc2MzV9.Z5px_GT15TRKhJCTHhDt5Z6K6LRDSFnLj8U5ok9l7gw
 
-Este ejemplo envÌa las reclamaciones firmadas:
+Este ejemplo env√≠a los reclamos firmados:
 
     {
       "sub": "1234567890",
@@ -583,4 +676,387 @@ Este ejemplo envÌa las reclamaciones firmadas:
       "exp": 1538207635
     }
 
-NB: la implementaciÛn de JWT solo admite los algoritmos basados ??en hash HS256, HS384 y HS512.
+NOTA: la implementaci√≥n de JWT solo admite los algoritmos basados ‚Äã‚Äãen RSA y HMAC.
+
+##### Configurar y probar la autenticaci√≥n JWT con Auth0.
+
+Primero necesitas crear una cuenta en [Auth0](https://auth0.com/auth/login).
+Una vez que haya iniciado sesi√≥n, debe crear una aplicaci√≥n (su tipo no importa).
+Recoger el `Domain` y el `Client ID` IDy mantenerlos para un uso posterior. Luego, cree una API: as√≠gnele un nombre y complete el identifiercampo con la URL de su punto final de API.
+
+Luego tienes que configurar la `jwtAuth.secret` onfiguraci√≥n en tu archivo `api.php`.
+DNo lo llene con `secret` lo que encontrar√° en la configuraci√≥n de la aplicaci√≥n Auth0, sino con un certificado p√∫blico.
+Para encontrarlo, vaya a la configuraci√≥n de su aplicaci√≥n, luego en "Configuraci√≥n adicional".
+Ahora encontrar√° una pesta√±a "Certificados" donde encontrar√° su clave p√∫blica en el campo Certificado de firma.
+
+Aseg√∫rese de llenar estas tres variables:
+
+ - `authUrl` con su dominio Auth0
+ - `clientId` con su ID de cliente
+ - `audience` con la URL de la API que cre√≥ en Auth0
+
+‚ö†Ô∏è Si no llena el par√°metro de audiencia, no funcionar√° porque no obtendr√° un JWT v√°lido.
+
+Tambi√©n puede cambiar la `url` variable, utilizada para probar la API con autenticaci√≥n.
+
+[M√°s informaci√≥n](https://auth0.com/docs/api-auth/tutorials/verify-access-token)
+
+##### Configure y pruebe la autenticaci√≥n JWT con Firebase
+
+Primero debe crear un proyecto de Firebase en la [Consola Firebase](https://console.firebase.google.com/).
+Agregue una aplicaci√≥n web a este proyecto y capture el fragmento de c√≥digo para su uso posterior.
+
+Luego tienes que configurar la `jwtAuth.secret` configuraci√≥n en tu archivo `api.php`.
+Agarra la clave p√∫blica a trav√©s de esta [URL](https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com).
+Puede haber varios certificados, solo toma el correspondiente a tu `kid` (si no sabes qu√© es, solo pru√©balos todos hasta que ingreses).
+Ahora, simplemente llene jwtAuth.secretcon su clave p√∫blica.
+
+Tambi√©n puede cambiar la urlvariable, utilizada para probar la API con autenticaci√≥n.
+
+[M√°s informaci√≥n](https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_a_third-party_jwt_library)
+
+## Operaciones de autorizaci√≥n
+
+El modelo de Autorizaci√≥n act√∫a sobre "operations". Los m√°s importantes se enumeran aqu√≠:
+
+    method path                  - operation - description
+    ----------------------------------------------------------------------------------------
+    GET    /records/{table}      - list      - lists records
+    POST   /records/{table}      - create    - creates records
+    GET    /records/{table}/{id} - read      - reads a record by primary key
+    PUT    /records/{table}/{id} - update    - updates columns of a record by primary key
+    DELETE /records/{table}/{id} - delete    - deletes a record by primary key
+    PATCH  /records/{table}/{id} - increment - increments columns of a record by primary key
+
+El "`/openapi`" punto final solo mostrar√° lo que est√° permitido en su sesi√≥n.
+Tambi√©n tiene una operaci√≥n especial de "documento" que le permite ocultar tablas y columnas de la documentaci√≥n.
+
+Para los puntos finales que comienzan con "`/columns`" est√°n las operaciones "reflect" y "remodel".
+Estas operaciones pueden mostrar o cambiar la definici√≥n de la base de datos, tabla o columna.
+Esta funcionalidad est√° desactivada por defecto y por una buena raz√≥n (¬°cuidado!).
+Agregue las "columns" al controlador en la configuraci√≥n para habilitar esta funcionalidad.
+
+### Autorizar tablas, columnas y registros.
+
+Por defecto, todas las tablas y columnas son accesibles. Si desea restringir el acceso a algunas tablas, puede agregar el middleware de "authorization" 
+y definir una funci√≥n de '"authorization.tableHandler"' "autorizaci√≥n.tabla de lectura" que devuelva '"false"' para estas tablas.
+
+    'authorization.tableHandler' => function ($operation, $tableName) {
+        return $tableName != 'license_keys';
+    },
+
+El ejemplo anterior restringir√° el acceso a la tabla 'license_keys' para todas las operaciones.
+
+    'authorization.columnHandler' => function ($operation, $tableName, $columnName) {
+        return !($tableName == 'users' && $columnName == 'password');
+    },
+
+El ejemplo anterior restringir√° el acceso al campo 'contrase√±a' de la tabla 'usuarios' para todas las operaciones.
+
+    'authorization.recordHandler' => function ($operation, $tableName) {
+        return ($tableName == 'users') ? 'filter=username,neq,admin' : '';
+    },
+
+El ejemplo anterior no permitir√° el acceso a los registros de usuario donde el nombre de usuario es "admin". Esta construcci√≥n agrega un filtro a cada consulta ejecutada.
+
+NOTA: debe manejar la creaci√≥n de registros no v√°lidos con un controlador de validaci√≥n (o saneamiento).
+
+### Entrada desinfectante o saneada
+
+Por defecto, todas las entradas son aceptadas y enviadas a la base de datos. Si desea eliminar (ciertas) etiquetas HTML antes de almacenarlas, 
+puede agregar el middleware 'sanitation' y definir una funci√≥n 'sanitation.handler' que devuelva el valor ajustado.
+
+    'sanitation.handler' => function ($operation, $tableName, $column, $value) {
+        return is_string($value) ? strip_tags($value) : $value;
+    },
+
+El ejemplo anterior eliminar√° todas las etiquetas HTML de las cadenas en la entrada.
+
+### Validando entrada
+
+Por defecto se acepta toda la entrada. Si desea validar la entrada, puede agregar el middleware 'validation' 
+y definir una funci√≥n 'validation.handler' que devuelva un valor booleano que indique si el valor es v√°lido o no.
+
+    'validation.handler' => function ($operation, $tableName, $column, $value, $context) {
+        return ($column['name'] == 'post_id' && !is_numeric($value)) ? 'must be numeric' : true;
+    },
+
+Cuando editas un comentario con id 4 usando:
+
+    PUT /records/comments/4
+
+Y env√≠as como cuerpo:
+
+    {"post_id":"two"}
+
+Luego, el servidor devolver√° un c√≥digo de estado HTTP '422' y un mensaje de error agradable:
+
+    {
+        "code": 1013,
+        "message": "Input validation failed for 'comments'",
+        "details": {
+            "post_id":"must be numeric"
+        }
+    }
+
+Puede analizar esta salida para hacer que los campos de formulario aparezcan con un borde rojo y su mensaje de error correspondiente.
+
+### Soporte multi-tenencia
+
+Puede usar el middleware "multiTenancy" cuando tenga una base de datos de m√∫ltiples inquilinos.
+Si sus inquilinos est√°n identificados por la columna "customer_id" puede usar el siguiente controlador:
+
+    'multiTenancy.handler' => function ($operation, $tableName) {
+        return ['customer_id' => 12];
+    },
+
+Esta construcci√≥n agrega un filtro que requiere que "customer_id" sea "12" a cada operaci√≥n (excepto para "crear").
+Tambi√©n establece la columna "customer_id" en "crear" a "12" y elimina la columna de cualquier otra operaci√≥n de escritura.
+
+### Evitar el raspado de la base de datos
+
+Puede utilizar el middleware "joinLimits" y "pageLimits" para evitar el raspado de la base de datos.
+El middleware "joinLimits" limita la profundidad de la tabla, el n√∫mero de tablas y el n√∫mero de registros devueltos en una operaci√≥n de uni√≥n.
+Si desea permitir 5 uniones directas directas con un m√°ximo de 25 registros cada una, puede especificar:
+
+    'joinLimits.depth' => 1,
+    'joinLimits.tables' => 5,
+    'joinLimits.records' => 25,
+
+El middleware "pageLimits" limita el n√∫mero de p√°gina y los registros de n√∫meros devueltos por una operaci√≥n de lista.
+Si no desea permitir m√°s de 10 p√°ginas con un m√°ximo de 25 registros cada una, puede especificar:
+
+    'pageLimits.pages' => 10,
+    'pageLimits.records' => 25,
+
+NOTA: el n√∫mero m√°ximo de registros tambi√©n se aplica cuando no hay un n√∫mero de p√°gina especificado en la solicitud.
+
+### Manejadores de personalizaci√≥n
+
+Puede utilizar el middleware de "personalizaci√≥n" para modificar la solicitud y respuesta e implementar cualquier otra funcionalidad.
+
+    'customization.beforeHandler' => function ($operation, $tableName, $request, $environment) {
+        $environment->start = microtime(true);
+    },
+    'customization.afterHandler' => function ($operation, $tableName, $response, $environment) {
+        return $response->withHeader('X-Time-Taken', microtime(true) - $environment->start);
+    },
+
+El ejemplo anterior agregar√° un encabezado "X-Time-Taken" con el n√∫mero de segundos que ha tomado la llamada a la API.
+
+### Archivos subidos
+
+Las cargas de archivos se admiten a trav√©s de [FileReader API](https://caniuse.com/#feat=filereader), consulte el [Ejemplo](##EjemploUploadImage).
+
+## Especificaci√≥n de openapi
+
+En el punto final "/openapi" se sirve la especificaci√≥n de OpenAPI 3.0 (anteriormente llamada "Swagger").
+Es una documentaci√≥n instant√°nea legible por m√°quina de su API. Para obtener m√°s informaci√≥n, echa un vistazo a estos enlaces:
+
+- [Swagger Editor](https://editor.swagger.io/) se puede usar para ver y depurar la especificaci√≥n generada.
+- [Especificaci√≥n OpenAPI](https://swagger.io/specification/) es un manual para crear una especificaci√≥n OpenAPI.
+- [Swagger Petstore](https://petstore.swagger.io/) es una documentaci√≥n de ejemplo que se genera utilizando OpenAPI.
+
+## Cache
+
+Hay 4 motores de cach√© que pueden configurarse mediante el par√°metro de configuraci√≥n "cacheType":
+
+- TempFile (por defecto)
+- Redis
+- Memcache
+- Memcached
+
+Puede instalar las dependencias de los √∫ltimos tres motores ejecutando:
+
+    sudo apt install php-redis redis
+    sudo apt install php-memcache memcached
+    sudo apt install php-memcached memcached
+
+El motor predeterminado no tiene dependencias y usar√° archivos temporales en la ruta "temporal" del sistema.
+
+Puede usar el par√°metro de configuraci√≥n "cachePath" para especificar la ruta del sistema de archivos para los archivos temporales o, 
+en caso de que use un "cacheType" no predeterminado, el nombre de host (opcionalmente con puerto) del servidor de cach√©.
+
+## Tipos
+
+Estos son los tipos admitidos con su longitud / precisi√≥n / escala predeterminadas:
+
+character types
+- varchar(255)
+- clob
+
+boolean types:
+- boolean
+
+integer types:
+- integer
+- bigint
+
+floating point types:
+- float
+- double
+
+decimal types:
+- decimal(19,4)
+
+date/time types:
+- date
+- time
+- timestamp
+
+binary types:
+- varbinary(255)
+- blob
+
+other types:
+- geometry / * tipo no jdbc, extensi√≥n con soporte limitado * /
+
+## Enteros de 64 bits en JavaScript
+
+JavaScript no es compatible con enteros de 64 bits. Todos los n√∫meros se almacenan como valores de punto flotante de 64 bits.
+La mantisa de un n√∫mero de punto flotante de 64 bits es solo de 53 bits y es por eso que todos los n√∫meros enteros mayores a 53 bits pueden causar problemas en JavaScript.
+
+## Errores
+
+Los siguientes errores pueden ser reportados:
+
+| Error | C√≥digo de respuesta HTTP   | Mensaje (original)                | Mensaje (Espa√±ol)                          |
+| ------| -------------------------- | --------------------------------- | ------------------------------------------ | 
+| 1000  | 404 Not found              | Route not found                   | Ruta no encontrada                         |
+| 1001  | 404 Not found              | Table not found                   | Tabla no encontrada                        |
+| 1002  | 422 Unprocessable entity   | Argument count mismatch           | Discrepancia en el recuento de argumentos  |
+| 1003  | 404 Not found              | Record not found                  | Registro no encontrado                     |
+| 1004  | 403 Forbidden              | Origin is forbidden               | El origen esta prohibido                   |
+| 1005  | 404 Not found              | Column not found                  | Columna no encontrada                      |
+| 1006  | 409 Conflict               | Table already exists              | La tabla ya existe                         |
+| 1007  | 409 Conflict               | Column already exists             | La columna ya existe                       |
+| 1008  | 422 Unprocessable entity   | Cannot read HTTP message          | No se puede leer el mensaje HTTP           |
+| 1009  | 409 Conflict               | Duplicate key exception           | Excepci√≥n de clave duplicada               |
+| 1010  | 409 Conflict               | Data integrity violation          | Violaci√≥n de integridad de datos           |
+| 1011  | 401 Unauthorized           | Authentication required           | Autenticacion requerida                    |
+| 1012  | 403 Forbidden              | Authentication failed             | Autenticaci√≥n fallida                      |
+| 1013  | 422 Unprocessable entity   | Input validation failed           | La validaci√≥n de entrada fall√≥             |
+| 1014  | 403 Forbidden              | Operation forbidden               | Operaci√≥n prohibida                        |
+| 1015  | 405 Method not allowed     | Operation not supported           | Operaci√≥n no soportada                     |
+| 1016  | 403 Forbidden              | Temporary or permanently blocked  | Temporal o permanentemente bloqueado       |
+| 1017  | 403 Forbidden              | Bad or missing XSRF token         | Token XSRF malo o faltante                 |
+| 1018  | 403 Forbidden              | Only AJAX requests allowed        | Solo se permiten peticiones AJAX           |
+| 1019  | 403 Forbidden              | Pagination Forbidden              | Paginaci√≥n Prohibida                       |
+| 9999  | 500 Internal server error  | Unknown error                     | Error desconocido                          |
+
+Se utiliza la siguiente estructura JSON:
+
+    {
+        "code":1002,
+        "message":"Argument count mismatch in '1'"
+    }
+
+NOTA: Cualquier respuesta que no sea de error tendr√° un estado: 200 OK
+
+## Pruebas
+
+Estoy probando principalmente en Ubuntu y tengo las siguientes configuraciones de prueba:
+
+  - (Docker) Debian 9 con PHP 7.0, MariaDB 10.1, PostgreSQL 9.6 (PostGIS 2.3)
+  - (Docker) Ubuntu 16.04 con PHP 7.0, MariaDB 10.0, PostgreSQL 9.5 (PostGIS 2.2) y SQL Server 2017
+  - (Docker) Ubuntu 18.04 con PHP 7.2, MySQL 5.7, PostgreSQL 10.4 (PostGIS 2.4)
+
+Esto no cubre todos los entornos (todav√≠a), as√≠ que notif√≠queme sobre las pruebas fallidas e informe su entorno.
+,,Intentar√© cubrir las configuraciones m√°s relevantes en la carpeta "docker" del proyecto.
+
+## Ejemplo de configuraci√≥n de Nginx
+```
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.php index.html index.htm index.nginx-debian.html;
+    server_name server_domain_or_IP;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ [^/]\.php(/|$) {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        try_files $fastcgi_script_name =404;
+        set $path_info $fastcgi_path_info;
+        fastcgi_param PATH_INFO $path_info;
+        fastcgi_index index.php;
+        include fastcgi.conf;
+        fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
+
+### Docker
+
+Instale la ventana acoplable utilizando los siguientes comandos y luego cierre la sesi√≥n e inicie sesi√≥n para que los cambios surtan efecto:
+
+    sudo apt install docker.io
+    sudo usermod -aG docker ${USER}
+
+Para ejecutar las pruebas de la ventana acoplable, ejecute "build_all.sh" y "run_all.sh" desde el directorio de la ventana acoplable. La salida debe ser:
+
+    ================================================
+    Debian 9 (PHP 7.0)
+    ================================================
+    [1/4] Starting MariaDB 10.1 ..... done
+    [2/4] Starting PostgreSQL 9.6 ... done
+    [3/4] Starting SQLServer 2017 ... skipped
+    [4/4] Cloning PHP-CRUD-API v2 ... skipped
+    ------------------------------------------------
+    mysql: 95 tests ran in 2651 ms, 0 failed
+    pgsql: 95 tests ran in 573 ms, 0 failed
+    sqlsrv: skipped, driver not loaded
+    ================================================
+    Ubuntu 16.04 (PHP 7.0)
+    ================================================
+    [1/4] Starting MariaDB 10.0 ..... done
+    [2/4] Starting PostgreSQL 9.5 ... done
+    [3/4] Starting SQLServer 2017 ... done
+    [4/4] Cloning PHP-CRUD-API v2 ... skipped
+    ------------------------------------------------
+    mysql: 95 tests ran in 2670 ms, 0 failed
+    pgsql: 95 tests ran in 550 ms, 0 failed
+    sqlsrv: 95 tests ran in 6624 ms, 0 failed
+    ================================================
+    Ubuntu 18.04 (PHP 7.2)
+    ================================================
+    [1/4] Starting MySQL 5.7 ........ done
+    [2/4] Starting PostgreSQL 10.4 .. done
+    [3/4] Starting SQLServer 2017 ... skipped
+    [4/4] Cloning PHP-CRUD-API v2 ... skipped
+    ------------------------------------------------
+    mysql: 95 tests ran in 3186 ms, 0 failed
+    pgsql: 95 tests ran in 556 ms, 0 failed
+    sqlsrv: skipped, driver not loaded
+
+La ejecuci√≥n de prueba anterior (incluido el inicio de las bases de datos) toma menos de un minuto en mi m√°quina.
+
+    $ ./run.sh 
+    1) debian9
+    2) ubuntu16
+    3) ubuntu18
+    > 3
+    ================================================
+    Ubuntu 18.04 (PHP 7.2)
+    ================================================
+    [1/4] Starting MySQL 5.7 ........ done
+    [2/4] Starting PostgreSQL 10.4 .. done
+    [3/4] Starting SQLServer 2017 ... skipped
+    [4/4] Cloning PHP-CRUD-API v2 ... skipped
+    ------------------------------------------------
+    mysql: 95 tests ran in 3186 ms, 0 failed
+    pgsql: 95 tests ran in 556 ms, 0 failed
+    sqlsrv: skipped, driver not loaded
+    root@b7ab9472e08f:/php-crud-api# 
+
+Como puede ver, la secuencia de comandos "run.sh" le da acceso a un aviso en un entorno de docker elegido.
+En este entorno se montan los archivos locales. Esto permite una f√°cil depuraci√≥n en diferentes entornos.
+Puede escribir "exit" cuando haya terminado.
