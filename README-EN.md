@@ -374,7 +374,7 @@ This may lead to the following JSON data:
                         post_id: 1,
                         user_id: {
                             id: 1,
-                            username: "mevdschee",
+                            username: "feliphegomez",
                             phone: null,
                         },
                         message: "Hi!"
@@ -384,7 +384,7 @@ This may lead to the following JSON data:
                         post_id: 1,
                         user_id: {
                             id: 1,
-                            username: "mevdschee",
+                            username: "feliphegomez",
                             phone: null,
                         },
                         message: "Hi again!"
@@ -855,13 +855,13 @@ should not use the "authorization" middleware, but you do need to use the "recon
 "reconnect" middleware allow you to specify the correct username and password, like this:
 
     'reconnect.usernameHandler' => function () {
-        return 'mevdschee';
+        return 'feliphegomez';
     },
     'reconnect.passwordHandler' => function () {
         return 'secret123';
     },
 
-This will make the API connect to the database specifying "mevdschee" as the username and "secret123" as the password.
+This will make the API connect to the database specifying "feliphegomez" as the username and "secret123" as the password.
 The OpenAPI specification is less specific on allowed and disallowed operations when you are using database permissions,
 as the permissions are not read in the reflection step.
 
@@ -1099,7 +1099,7 @@ This functionality is disabled by default and must be enabled using the "middlew
 
 ### File uploads
 
-File uploads are supported through the [FileReader API](https://caniuse.com/#feat=filereader), check out the [example](https://github.com/mevdschee/php-crud-api/blob/master/examples/clients/upload/vanilla.html).
+File uploads are supported through the [FileReader API](https://caniuse.com/#feat=filereader), check out the [example](https://github.com/feliphegomez/php-crud-api/blob/master/examples/clients/upload/vanilla.html).
 
 ## OpenAPI specification
 
